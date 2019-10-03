@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { saveSnapshotFile } from 'jest-snapshot/build/utils';
 const axios = require('axios');
 
 export default class Register extends Component {
@@ -12,20 +11,29 @@ export default class Register extends Component {
             password: ''
         }
         this.save = this.save.bind(this);
-        this.name = React.createRef();
-        this.user = React.createRef();
-        this.email = React.createRef();
-        this.psw = React.createRef();
+        this.myUser = this.myUser.bind(this);
+        this.myName = this.myName.bind(this);
+        this.myMail = this.myMail.bind(this);
+        this.myPsw = this.myPsw.bind(this);
+    }
+
+    myName(event){
+        this.setState({name: event.target.value});
+    }
+
+    myUser(event){
+        this.setState({username: event.target.value});
+    }
+
+    myMail(event){
+        this.setState({email: event.target.value});
+    }
+
+    myPsw(event){
+        this.setState({password: event.target.value});
     }
 
     save(){
-        this.setState({
-            name: this.name.current.value,
-            username: this.user.current.value,
-            email: this.email.current.value,
-            password: this.psw.current.value
-        })
-
         axios.post('http://localhost:3000/users', {
             name: this.state.name,
             username: this.state.username,
@@ -48,23 +56,23 @@ export default class Register extends Component {
                 <div className="col s12 l8 offset-l2">
                     <div className="row">
                         <div className="input-field col s12">
-                            <input  id="name" type="text" className="validate" ref={this.name} />
+                            <input  id="name" type="text" className="validate" onChange={this.myName} />
                             <label htmlFor="name">Name</label>
                         </div>
                         <div className="input-field col s12">
-                            <input  id="username" type="text" className="validate" ref={this.user}/>
+                            <input  id="username" type="text" className="validate" onChange={this.myUser}/>
                             <label htmlFor="username">User</label>
                         </div>
                         <div className="input-field col s12">
-                            <input  id="email" type="text" className="validate" ref={this.email} />
+                            <input  id="email" type="text" className="validate" onChange={this.myMail} />
                             <label htmlFor="email">Email</label>
                         </div>
                         <div className="input-field col s12">
-                            <input id="password" type="password" className="validate" ref={this.psw}/>
+                            <input id="password" type="password" className="validate" onChange={this.myPsw}/>
                             <label htmlFor="password">Password</label>
                         </div>
                     </div>
-                    <a className="waves-effect waves-light btn right" onClick={this.save}>Register</a>
+                    <a className="waves-effect waves-light btn right blue" onClick={this.save}>Register</a>
                 </div>
             </div>
         )
