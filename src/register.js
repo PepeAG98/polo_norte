@@ -19,7 +19,7 @@ export default class Register extends Component {
     }
 
     save(){
-        /*this.setState({
+        this.setState({
             name: this.name.current.value,
             username: this.user.current.value,
             email: this.email.current.value,
@@ -40,34 +40,6 @@ export default class Register extends Component {
               console.log(err);
               window.alert("Error");
           });
-          axios.post('https://still-garden-88285.herokuapp.com/draft_tweets', {
-            user_name: 'ctellezesp',
-        	avatar: 'https://vignette.wikia.nocookie.net/death-battle-en-espanol/images/1/16/Crash_Bandicoot.png/revision/latest?cb=20180405173124&path-prefix=es',
-        	description: 'Probando API'
-          })
-          .then(res => {
-              console.log(res);
-              window.alert("Tweet Fetched");
-          })
-          .catch(err => {
-              console.log(err);
-              window.alert("No Twitetr");
-          })*/
-          fetch('http://localhost:3000/users', {
-              method: 'POST',
-              headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-              },
-             body: JSON.stringify( {
-                name: this.state.name,
-                username:this.state.username,
-                email: this.state.email,
-                password: this.state.password
-            })
-        }).then(res => res.json())
-        .then(data => console.log(data))
-        .catch(err => console.log(err));
     }
 
     render() {
