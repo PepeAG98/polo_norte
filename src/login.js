@@ -22,6 +22,7 @@ export default class Login extends Component {
     }
 
     logged(){
+        //No usamos bcrypt aqui
         console.log(this.state);
         axios.post('http://localhost:3000/users/login', {
             username: this.state.username,

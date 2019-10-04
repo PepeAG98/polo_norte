@@ -31,6 +31,7 @@ export default class Register extends Component {
 
     myPsw(event){
         this.setState({password: event.target.value});
+        
     }
 
     save(){
