@@ -3,9 +3,17 @@ import logo from './logo.svg';
 import './App.css';
 import 'materialize-css'; // It installs the JS asset only
 import 'materialize-css/dist/css/materialize.min.css';
-import Register from './register';
-import Login from './login';
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+
+//Components
+import Register from './components/register';
+import Login from './components/login';
+import CreateChild from './components/children/create-child';
+import EditChild from './components/children/edit-child';
+import ChildrenList from './components/children/children-list';
+import CreateLetter from './components/letter/create-letter';
+import EditLetter from './components/letter/edit-letter';
+import LetterList from './components/letter/letter-list';
 
 function App() {
   return (
@@ -13,6 +21,12 @@ function App() {
       <Router>
         <Route path="/" exact component={Login} />
         <Route path="/register" component={Register} />
+        <Route path="/create-child" component={CreateChild} />
+        <Route path="/edit-child/:id" component={EditChild} />
+        <Route path="/children-list" component={ChildrenList} />
+        <Route path="/create-letter" component={CreateLetter} />
+        <Route path="/edit-letter/:id" component={EditLetter} />
+        <Route path="/letter-list" component={LetterList} />
       </Router>
     </div>
   );
