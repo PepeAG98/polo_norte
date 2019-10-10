@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { BrowserRouter, Route } from 'react-router-dom'
 const axios = require('axios');
 
 export default class Login extends Component {
@@ -31,6 +32,7 @@ export default class Login extends Component {
           .then(res => {
               console.log(res);
               window.alert("Login Realizado");
+              this.props.history.push(`/dashboard`);
           })
           .catch(err => {
               console.log(err);

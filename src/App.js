@@ -14,6 +14,7 @@ import ChildrenList from './components/children/children-list';
 import CreateLetter from './components/letter/create-letter';
 import EditLetter from './components/letter/edit-letter';
 import LetterList from './components/letter/letter-list';
+import Dashboard from './components/dashboard';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
       <Router>
         <Route path="/" exact component={Login} />
         <Route path="/register" component={Register} />
+        <Route path="/dashboard" component={Dashboard} />
         <Route path="/create-child" component={CreateChild} />
         <Route path="/edit-child/:id" component={EditChild} />
         <Route path="/children-list" component={ChildrenList} />
