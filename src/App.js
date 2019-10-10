@@ -15,11 +15,13 @@ import CreateLetter from './components/letter/create-letter';
 import EditLetter from './components/letter/edit-letter';
 import LetterList from './components/letter/letter-list';
 import Dashboard from './components/dashboard';
+import Menu from './components/menu';
 
 function App() {
   return (
     <div>
       <Router>
+        <Menu />
         <Route path="/" exact component={Login} />
         <Route path="/register" component={Register} />
         <Route path="/dashboard" component={Dashboard} />

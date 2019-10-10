@@ -6,10 +6,10 @@ export default class EditChild extends Component {
         super(props);
         this.state = {
             id: props.match.params.id,
-            name: null,
-            date: null,
-            address: null,
-            evil: null
+            name: '',
+            date: '',
+            address: '',
+            evil: ''
         }
         this.edit = this.edit.bind(this);
         this.myName = this.myName.bind(this);
@@ -24,7 +24,7 @@ export default class EditChild extends Component {
             console.log(res.data.children);
             this.setState({
                 name: res.data.children.name,
-                date: res.data.children.date,
+                date: res.data.children.date_birth,
                 address: res.data.children.address,
                 evil: res.data.children.evil
             });
@@ -64,6 +64,21 @@ export default class EditChild extends Component {
 
     edit(){
         console.log(this.state);
+        axios.put(`http://localhost:3000/children/${this.state.id}`, {
+            name: this.state.name,
+            date_birth: this.state.date,
+            address: this.state.address,
+            evil: this.state.evil
+        })
+        .then(res => {
+            console.log(res);
+            window.alert('Data Edited');
+            this.props.history.push(`/children-list`);
+        })
+        .catch(err => {
+            console.log(err);
+            window.alert('Error');
+        })
     }
 
     render(){

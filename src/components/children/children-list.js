@@ -25,6 +25,14 @@ export default class ChildrenList extends Component {
         //console.log(this.state.data);
     }
 
+    delete(child){
+        console.log(`Voy a borrar: ${child}`);
+        axios.delete(`http://localhost:3000/children/${child}`)
+        .catch(err => {
+            console.log(err);
+        })
+    }
+
     render(){
         return(
             <div className="row">
@@ -38,6 +46,7 @@ export default class ChildrenList extends Component {
                             <th>Address</th>
                             <th>Evil</th>
                             <th>Edit</th>
+                            <th>Delete</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -48,6 +57,7 @@ export default class ChildrenList extends Component {
                                 <td>{children.address}</td>
                                 <td>{children.evil.toString()}</td>
                                 <td><Link to={`/edit-child/${children._id}`}><i className="material-icons">edit</i></Link></td>
+                                <td><i className="material-icons" onClick={() => this.delete(children._id)}>delete</i></td>
                             </tr>
                             )
                         })}
