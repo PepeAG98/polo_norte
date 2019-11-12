@@ -1,8 +1,8 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-import 'materialize-css'; // It installs the JS asset only
-import 'materialize-css/dist/css/materialize.min.css';
+//import 'materialize-css'; // It installs the JS asset only
+//import 'materialize-css/dist/css/materialize.min.css';
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
 //Components
@@ -21,7 +21,6 @@ function App() {
   return (
     <div>
       <Router>
-        <Menu />
         <Route path="/" exact component={Login} />
         <Route path="/register" component={Register} />
         <Route path="/dashboard" component={Dashboard} />

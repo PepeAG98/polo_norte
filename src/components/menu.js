@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
-//import './styles/menu.css';
+//import 'materialize-css'; // It installs the JS asset only
+//import 'materialize-css/dist/css/materialize.min.css';
 
 export default class Menu extends Component{
     render(){
