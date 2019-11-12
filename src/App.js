@@ -21,6 +21,7 @@ function App() {
   return (
     <div>
       <Router>
+        <Menu />
         <Route path="/" exact component={Login} />
         <Route path="/register" component={Register} />
         <Route path="/dashboard" component={Dashboard} />
