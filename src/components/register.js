@@ -7,13 +7,11 @@ export default class Register extends Component {
         this.state = {
             name: '',
             username: '',
-            email: '',
             password: ''
         }
         this.save = this.save.bind(this);
         this.myUser = this.myUser.bind(this);
         this.myName = this.myName.bind(this);
-        this.myMail = this.myMail.bind(this);
         this.myPsw = this.myPsw.bind(this);
     }
 
@@ -23,10 +21,6 @@ export default class Register extends Component {
 
     myUser(event){
         this.setState({username: event.target.value});
-    }
-
-    myMail(event){
-        this.setState({email: event.target.value});
     }
 
     myPsw(event){
@@ -63,10 +57,6 @@ export default class Register extends Component {
                         <div className="input-field col s12">
                             <input  id="username" type="text" className="validate" onChange={this.myUser}/>
                             <label htmlFor="username">User</label>
-                        </div>
-                        <div className="input-field col s12">
-                            <input  id="email" type="text" className="validate" onChange={this.myMail} />
-                            <label htmlFor="email">Email</label>
                         </div>
                         <div className="input-field col s12">
                             <input id="password" type="password" className="validate" onChange={this.myPsw}/>
