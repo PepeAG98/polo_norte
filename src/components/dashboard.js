@@ -1,48 +1,79 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { makeStyles } from '@material-ui/core/styles';
+import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
+import Grid from '@material-ui/core/Grid';
+import Menu from './menu';
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
+import GroupIcon from '@material-ui/icons/Group';
+import PostAddIcon from '@material-ui/icons/PostAdd';
+import DescriptionIcon from '@material-ui/icons/Description';
 import './styles/dashboard.css';
 
-export default class Dashboard extends Component {
-    render(){
-        return(
-            <div className="row">
-                <div className="col s12 l8 offset-l2">
-                    <div className="row">
-                        <div className="col s12 l6">
-                            <Link to="/create-child">
-                                <div className="card card-link center-align">
-                                    <i className="material-icons large">person_add</i>
-                                    <h4>Add Child</h4>
-                                </div>
-                            </Link>
-                        </div>
-                        <div className="col s12 l6">
-                            <Link to="/children-list">
-                                    <div className="card card-link center-align">
-                                        <i className="material-icons large">view_list</i>
-                                        <h4>Children List</h4>
-                                    </div>
-                                </Link>
-                        </div>
-                        <div className="col s12 l6">
-                            <Link to="/create-letter">
-                                    <div className="card card-link center-align">
-                                        <i className="material-icons large">add_box</i>
-                                        <h4>Add Letter</h4>
-                                    </div>
-                                </Link>
-                        </div>
-                        <div className="col s12 l6">
-                            <Link to="/letter-list">
-                                    <div className="card card-link center-align">
-                                        <i className="material-icons large">mail</i>
-                                        <h4>Letter List</h4>
-                                    </div>
-                                </Link>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        )
+const useStyles = makeStyles(theme => ({
+    root: {
+      background: '#f5f5f5'
     }
+}));
+
+function Dashboard(props) {
+    const classes = useStyles();
+    return(
+        <div className="main">
+            <Menu />
+            <Grid container direction="row" justify="center" alignItems="center" spacing={3}>
+                <Grid item xs={12} md={6} lg={6}>
+                    <Link to="create-child"><Paper className={classes.root}>
+                        <Grid container direction="column" justify="center" alignItems="center">
+                            <Grid item xs={12} justify="center" alignItems="center">
+                                <PersonAddIcon style={{ fontSize: 100 }}/>
+                                <Typography variant="h5" gutterBottom>
+                                    Agregar Niño
+                                </Typography>
+                            </Grid>
+                        </Grid>
+                    </Paper></Link>
+                </Grid>
+                <Grid item xs={12} md={6} lg={6}>
+                    <Link to="children-list"><Paper className={classes.root}>
+                        <Grid container direction="column" justify="center" alignItems="center">
+                            <Grid item xs={12} justify="center" alignItems="center">
+                                <GroupIcon style={{ fontSize: 100 }}/>
+                                <Typography variant="h5" gutterBottom>
+                                    Lista Niños
+                                </Typography>
+                            </Grid>
+                        </Grid>
+                    </Paper></Link>
+                </Grid>
+                <Grid item xs={12} md={6} lg={6}>
+                    <Link to="create-letter"><Paper className={classes.root}>
+                        <Grid container direction="column" justify="center" alignItems="center">
+                            <Grid item xs={12} justify="center" alignItems="center">
+                                <PostAddIcon style={{ fontSize: 100 }}/>
+                                <Typography variant="h5" gutterBottom>
+                                    Agregar Carta
+                                </Typography>
+                            </Grid>
+                        </Grid>
+                    </Paper></Link>
+                </Grid>
+                <Grid item xs={12} md={6} lg={6}>
+                    <Link to="letter-list"><Paper className={classes.root}>
+                        <Grid container direction="column" justify="center" alignItems="center">
+                            <Grid item xs={12} justify="center" alignItems="center">
+                                <DescriptionIcon style={{ fontSize: 100 }}/>
+                                <Typography variant="h5" gutterBottom>
+                                    Lista Carta
+                                </Typography>
+                            </Grid>
+                        </Grid>
+                    </Paper></Link>
+                </Grid>
+            </Grid>
+        </div>
+    )
 }
+
+export default Dashboard;
