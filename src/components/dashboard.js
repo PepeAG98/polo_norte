@@ -26,7 +26,7 @@ function Dashboard(props) {
                 <Grid item xs={12} md={6} lg={6}>
                     <Link to="create-child"><Paper className={classes.root}>
                         <Grid container direction="column" justify="center" alignItems="center">
-                            <Grid item xs={12} justify="center" alignItems="center">
+                            <Grid item xs={12}>
                                 <PersonAddIcon style={{ fontSize: 100 }}/>
                                 <Typography variant="h5" gutterBottom>
                                     Agregar Niño
@@ -38,7 +38,7 @@ function Dashboard(props) {
                 <Grid item xs={12} md={6} lg={6}>
                     <Link to="children-list"><Paper className={classes.root}>
                         <Grid container direction="column" justify="center" alignItems="center">
-                            <Grid item xs={12} justify="center" alignItems="center">
+                            <Grid item xs={12}>
                                 <GroupIcon style={{ fontSize: 100 }}/>
                                 <Typography variant="h5" gutterBottom>
                                     Lista Niños
@@ -50,7 +50,7 @@ function Dashboard(props) {
                 <Grid item xs={12} md={6} lg={6}>
                     <Link to="create-letter"><Paper className={classes.root}>
                         <Grid container direction="column" justify="center" alignItems="center">
-                            <Grid item xs={12} justify="center" alignItems="center">
+                            <Grid item xs={12}>
                                 <PostAddIcon style={{ fontSize: 100 }}/>
                                 <Typography variant="h5" gutterBottom>
                                     Agregar Carta
@@ -62,7 +62,7 @@ function Dashboard(props) {
                 <Grid item xs={12} md={6} lg={6}>
                     <Link to="letter-list"><Paper className={classes.root}>
                         <Grid container direction="column" justify="center" alignItems="center">
-                            <Grid item xs={12} justify="center" alignItems="center">
+                            <Grid item xs={12}>
                                 <DescriptionIcon style={{ fontSize: 100 }}/>
                                 <Typography variant="h5" gutterBottom>
                                     Lista Carta

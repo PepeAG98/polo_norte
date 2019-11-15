@@ -1,118 +1,231 @@
-import React, { Component } from 'react';
+import React, { Component, useState, useEffect } from 'react';
+import Menu from '../menu';
+import Grid from '@material-ui/core/Grid';
+import TextField from '@material-ui/core/TextField';
+import { makeStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+import IconButton from '@material-ui/core/IconButton';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import ErrorIcon from '@material-ui/icons/Error';
+import InfoIcon from '@material-ui/icons/Info';
+import CloseIcon from '@material-ui/icons/Close';
+import { amber, green } from '@material-ui/core/colors';
+import Snackbar from '@material-ui/core/Snackbar';
+import SnackbarContent from '@material-ui/core/SnackbarContent';
+import WarningIcon from '@material-ui/icons/Warning';
+import PropTypes from 'prop-types';
+import clsx from 'clsx';
+import FormGroup from '@material-ui/core/FormGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Switch from '@material-ui/core/Switch';
+import swal from 'sweetalert';
 const axios = require('axios');
 
-export default class EditChild extends Component {
-    constructor(props){
-        super(props);
-        this.state = {
-            id: props.match.params.id,
-            name: '',
-            date: '',
-            address: '',
-            evil: ''
+//Estilos para Inputs desde Material UI
+const useStyles = makeStyles(theme => ({
+    textField: {
+        paddingRight: 20,
+        paddingLeft: 20
+    },
+    button: {
+        margin: theme.spacing(1),
+    },
+    textField2: {
+        paddingRight: 40,
+        paddingLeft: 0,
+        paddingTop: 15
+    },
+    switch: {
+        marginTop: 25
+    }
+  }));
+
+ //Estilos para Mensaje de Error
+ const useStyles1 = makeStyles(theme => ({
+    error: {
+      backgroundColor: theme.palette.error.dark,
+    },
+    icon: {
+      fontSize: 20,
+    },
+    iconVariant: {
+      opacity: 0.9,
+      marginRight: theme.spacing(1),
+    },
+    message: {
+      display: 'flex',
+      alignItems: 'center',
+    },
+  }));
+
+  //Wrapper de Error
+  function MySnackbarContentWrapper(props) {
+    const classes = useStyles1();
+    const { className, message, onClose, variant, ...other } = props;
+    const Icon = variantIcon[variant];
+  
+    return (
+      <SnackbarContent
+        className={clsx(classes[variant], className)}
+        aria-describedby="client-snackbar"
+        message={
+          <span id="client-snackbar" className={classes.message}>
+            <Icon className={clsx(classes.icon, classes.iconVariant)} />
+            {message}
+          </span>
         }
-        this.edit = this.edit.bind(this);
-        this.myName = this.myName.bind(this);
-        this.myDate = this.myDate.bind(this);
-        this.myAddress = this.myAddress.bind(this);
-        this.myEvil = this.myEvil.bind(this);
-    }
+        action={[
+          <IconButton key="close" aria-label="close" color="inherit" onClick={onClose}>
+            <CloseIcon className={classes.icon} />
+          </IconButton>,
+        ]}
+        {...other}
+      />
+    );
+}
 
-    componentDidMount(){
-        axios.get(`http://localhost:3000/children/${this.state.id}`)
-        .then(res => {
-            console.log(res.data.children);
-            this.setState({
-                name: res.data.children.name,
-                date: res.data.children.date_birth,
-                address: res.data.children.address,
-                evil: res.data.children.evil
-            });
-        })
-        .catch(err => {
-            console.log(err);
-        });
-    }
+//Usos de Wrapper de Error
+MySnackbarContentWrapper.propTypes = {
+    className: PropTypes.string,
+    message: PropTypes.string,
+    onClose: PropTypes.func,
+    variant: PropTypes.oneOf(['error', 'info', 'success', 'warning']).isRequired,
+  };
 
-    myName(event){
-        this.setState({
-            name: event.target.value
-        });
-    }
 
-    myDate(event){
-        this.setState({
-            date: event.target.value
-        });
-    }
+  const variantIcon = {
+    success: CheckCircleIcon,
+    warning: WarningIcon,
+    error: ErrorIcon,
+    info: InfoIcon,
+  };
 
-    myAddress(event){
-        this.setState({
-            address: event.target.value
-        });
-    }
+function EditChild(props){
+    const classes = useStyles();
+    let [name, setName] = useState('');
+    let [date_birth, setDateBirth] = useState('2019-01-01');
+    let [address, setAddress] = useState('');
+    let [evil, setEvil] = useState(false);
+    //Manejar Wrapper
+    const [open, setOpen] = React.useState(false);
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setOpen(false);
+    };
 
-    myEvil(event){
-        let level;
-        if(event.target.value == "1")
-            level = false;
-        else level = true;
-        this.setState({
-            evil: level
-        });
-    }
-
-    edit(){
-        console.log(this.state);
-        axios.put(`http://localhost:3000/children/${this.state.id}`, {
+    function save(){
+        if(name == '' || date_birth == '' || address == '' ) {
+            setOpen(true);
+        } else {
+            console.log(name, date_birth, address, evil);
+            swal("Niño Agregado", `${name} ha sido agregado`, "success")
+            .then(() => {
+                props.history.push('/children-list')
+            })
+        }
+        /*axios.post('http://localhost:3000/children', {
             name: this.state.name,
             date_birth: this.state.date,
             address: this.state.address,
             evil: this.state.evil
-        })
-        .then(res => {
-            console.log(res);
-            window.alert('Data Edited');
-            this.props.history.push(`/children-list`);
-        })
-        .catch(err => {
-            console.log(err);
-            window.alert('Error');
-        })
+          })
+          .then(res => {
+              console.log(res);
+              window.alert("Children Added");
+              this.props.history.push(`/children-list`);
+          })
+          .catch(err => {
+              console.log(err);
+              window.alert("Error");
+          });*/
     }
 
-    render(){
-        return(
-            <div className="row">
-                <div className="col s12 l8 offset-l2">
-                    <div className="row">
-                        <div className="input-field col s12 l9">
-                            <i className="material-icons prefix">account_circle</i>
-                            <input id="name" type="text" className="validate" value={this.state.name} onChange={this.myName} />
-                            <label className="active" htmlFor="name">Name</label>
-                        </div>
-                        <div className="input-field col s12 l3">
-                            <i className="material-icons prefix">calendar_today</i>
-                            <input id="date_birth" type="date" className="validate" value={this.state.date} onChange={this.myDate} />
-                            <label className="active" htmlFor="date_birth">Date Birth</label>
-                        </div>
-                        <div className="input-field col s12 l10">
-                            <i className="material-icons prefix">house</i>
-                            <input id="address" type="text" className="validate" value={this.state.address} onChange={this.myAddress} />
-                            <label className="active" htmlFor="address">Address</label>
-                        </div>
-                        <div className="input-field col s12 l2">
-                            <label className="active">Level of Evil</label>
-                            <select className="browser-default" onChange={this.myEvil}>
-                                <option disabled defaultValue>Level of Evil</option>
-                                <option value="1">Low</option>
-                                <option value="2">High</option>
-                            </select>
-                        </div>
-                    </div>
-                    <a className="waves-effect waves-light btn right" onClick={this.edit}><i className="material-icons left">save</i>Save</a>
-                </div>
-            </div>
-        )
-    }
+    return(
+        <div className="main">
+            <Menu />
+            <Grid container direction="column" justify="center" alignItems="center">
+                <Typography variant="h3" gutterBottom>
+                    Nombre Niño
+                </Typography>
+                <Typography variant="subtitle1" gutterBottom>
+                    Por favor introduce los datos siguientes:
+                </Typography>
+            </Grid>
+            <Grid container direction="row" justify="center" alignItems="stretch">
+                <Grid item xs={12} lg={12} className={classes.textField}>
+                    <TextField
+                        required
+                        fullWidth
+                        id="name"
+                        label="Nombre"
+                        margin="normal"
+                        variant="outlined"
+                        onChange={(e) => setName(e.target.value)}
+                    />
+                </Grid>
+                <Grid item xs={12} md={4} className={classes.textField2}>
+                    <TextField
+                        fullWidth
+                        id="date"
+                        label="Fecha Nacimiento"
+                        type="date"
+                        defaultValue={date_birth}
+                        variant="outlined"
+                        className={classes.textField}
+                        
+                        onChange={(e) => setDateBirth(e.target.value)}
+                    />
+                </Grid>
+                <Grid item xs={12} md={7}  className={classes.textField}>
+                    <TextField
+                        required
+                        fullWidth
+                        id="address"
+                        label="Dirección"
+                        margin="normal"
+                        variant="outlined"
+                        onChange={(e) => setAddress(e.target.value)}
+                    />
+                </Grid>
+                <Grid item xs={12} md={1} className={classes.switch}>
+                    <FormControlLabel
+                        control={
+                        <Switch checked={evil} onChange={(e) => setEvil(!evil)} value="checkedA" />
+                        }
+                        label="Maldad"
+                    />
+                </Grid>
+            </Grid>
+            <Grid
+                container
+                direction="row"
+                justify="flex-end"
+                alignItems="center"
+            >
+                <Button variant="contained" color="primary" className={classes.button} onClick={save}>
+                    Registrar
+                </Button>
+            </Grid>
+            <Snackbar
+                anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'left',
+                }}
+                open={open}
+                autoHideDuration={4000}
+                onClose={handleClose}
+            >
+                <MySnackbarContentWrapper
+                onClose={handleClose}
+                variant="error"
+                message="Ningún valor puede estar vacio"
+                />
+            </Snackbar>
+        </div>
+    );
 }
+
+export default EditChild;

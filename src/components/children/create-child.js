@@ -19,6 +19,8 @@ import clsx from 'clsx';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
+import CheckIcon from '@material-ui/icons/Check';
+import { ToggleButton } from '@material-ui/lab';
 import swal from 'sweetalert';
 const axios = require('axios');
 
@@ -190,13 +192,24 @@ function CreateChild(props){
                         onChange={(e) => setAddress(e.target.value)}
                     />
                 </Grid>
-                <Grid item xs={12} md={1} className={classes.switch}>
-                    <FormControlLabel
-                        control={
-                        <Switch checked={evil} onChange={(e) => setEvil(!evil)} value="checkedA" />
-                        }
-                        label="Maldad"
-                    />
+                <Grid item xs={12} md={1}>
+                    <Grid container direction="column" justify="center" alignItems="center">
+                        <Grid item xs={12}>
+                            <span>Maldad</span>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <ToggleButton
+                                value="check"
+                                selected={evil}
+                                onChange={() => {
+                                    setEvil(!evil);
+                                }}
+                            >
+                                <CheckIcon color={evil ? "error": "primary"} />
+                            </ToggleButton>
+                        </Grid>
+                    </Grid>
+                    
                 </Grid>
             </Grid>
             <Grid
