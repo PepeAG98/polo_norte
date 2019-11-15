@@ -10,6 +10,7 @@ import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import AddIcon from '@material-ui/icons/Add';
+import swal from 'sweetalert';
 const axios = require('axios');
 
 /*class ChildrenList extends Component {
@@ -109,7 +110,7 @@ function LetterList(props){
         //console.log(this.state.data);*/
     });
 
-    /*function deleteChild(child) {
+    function deleteLetter(letter) {
         swal({
             title: "¿Quieres eliminar a este niño?",
             text: "Una vez que lo elimines no podrás recuperar la información",
@@ -126,7 +127,7 @@ function LetterList(props){
               swal("Eliminación Cancelada");
             }
           });
-    }*/
+    }
     return(
         <div className="main">
             <Menu />
