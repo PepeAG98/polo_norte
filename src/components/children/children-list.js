@@ -87,12 +87,8 @@ const axios = require('axios');
 //Solo Ejemplo
 function createData(name, date_birth, address, evil) {
     return { name, date_birth, address, evil };
-  }
-  
-const rows = [
-    createData('Carlos Erasmo Tellez Espejel', '10-02-1998', 'Cristobal Colon 18, Centro, Calpulalpan, Tlaxcala', 'Baja'),
-    createData('Jose Juan Alvarado García', '30-05-1998', 'Pachuquilla, Hgo', 'Alta')
-];
+}
+
 
 const StyledTableCell = withStyles(theme => ({
     head: {
@@ -126,22 +122,17 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-function ChildrenList(props){
+function ChildrenList(){
     const classes = useStyles();
-    //let [data, setData] = (null);
-    useEffect(() => {
-        /*axios.get('http://localhost:3000/children')
+    let [children, setChildren] = useState([]);
+    const list = [];
+    
+    useEffect( () => { 
+        axios.get('https://santa-api-ldaw.herokuapp.com/children')
         .then(res => {
-            console.log(res.data.children);
-            this.setState({
-                data: res.data.children
-            });
-        })
-        .catch(err => {
-            console.log(err);
+            setChildren(res.data.result);
         });
-        //console.log(this.state.data);*/
-    });
+    }, [children] );
 
     function deleteChild(child) {
         swal({
@@ -153,9 +144,15 @@ function ChildrenList(props){
           })
           .then((willDelete) => {
             if (willDelete) {
-              swal("Información eliminada", {
-                icon: "success",
-              });
+                axios.delete(`https://santa-api-ldaw.herokuapp.com/children/${child}`)
+                .then(() => {
+                    swal("Información eliminada", {
+                        icon: "success",
+                    });
+                })
+                .catch(err => {
+                    swal("Error", err, "error");
+                })
             } else {
               swal("Eliminación Cancelada");
             }
@@ -190,24 +187,26 @@ function ChildrenList(props){
                             </TableRow>
                             </TableHead>
                             <TableBody>
-                            {rows.map(row => (
-                                <TableRow key={row.name}>
-                                <TableCell align="left">{row.name}</TableCell>
-                                <TableCell align="left">{row.date_birth}</TableCell>
-                                <TableCell align="left">{row.address}</TableCell>
-                                <TableCell align="left">{row.evil}</TableCell>
-                                <TableCell align="left">
-                                    <Link to={`edit-child/${row.name}`}><IconButton aria-label="edit">
-                                        <EditIcon fontSize="small" color="primary" />
-                                    </IconButton></Link>
-                                </TableCell>
-                                <TableCell align="left">
-                                    <IconButton aria-label="delete" onClick={() => deleteChild(row.name)}>
-                                        <DeleteIcon fontSize="small" color="error" />
-                                    </IconButton>
-                                </TableCell>
-                                </TableRow>
-                            ))}
+                            {children.map((row, index) => {
+                                return(
+                                    <TableRow key={index}>
+                                        <TableCell align="left">{row.name}</TableCell>
+                                        <TableCell align="left">{row.date_birth}</TableCell>
+                                        <TableCell align="left">{row.address}</TableCell>
+                                        <TableCell align="left">{row.evil ? 'Alta': 'Baja'}</TableCell>
+                                        <TableCell align="left">
+                                            <Link to={`edit-child/${row._id}`}><IconButton aria-label="edit">
+                                                <EditIcon fontSize="small" color="primary" />
+                                            </IconButton></Link>
+                                        </TableCell>
+                                        <TableCell align="left">
+                                            <IconButton aria-label="delete" onClick={() => deleteChild(row._id)}>
+                                                <DeleteIcon fontSize="small" color="error" />
+                                            </IconButton>
+                                        </TableCell>
+                                    </TableRow>
+                                );
+                            })}
                             </TableBody>
                         </Table>
                     </Paper>
@@ -218,3 +217,7 @@ function ChildrenList(props){
 }
 
 export default ChildrenList;
+
+/*
+
+                            */

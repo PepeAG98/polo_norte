@@ -18,7 +18,8 @@ import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Switch from '@material-ui/core/Switch';
+import CheckIcon from '@material-ui/icons/Check';
+import { ToggleButton } from '@material-ui/lab';
 import swal from 'sweetalert';
 const axios = require('axios');
 
@@ -116,6 +117,20 @@ function EditChild(props){
         setOpen(false);
     };
 
+    useEffect(() => {
+        console.log(props.match.params.id);
+        axios.get(`https://santa-api-ldaw.herokuapp.com/children/${props.match.params.id}`)
+        .then(res => {
+            setName(res.data.children.name);
+            setDateBirth(res.data.children.date_birth);
+            setAddress(res.data.children.address);
+            setEvil(res.data.children.evil);
+        })
+        .catch(err => {
+            console.log(err);
+        }, [name, date_birth, address, evil]);
+    })
+
     function save(){
         if(name == '' || date_birth == '' || address == '' ) {
             setOpen(true);
@@ -126,21 +141,6 @@ function EditChild(props){
                 props.history.push('/children-list')
             })
         }
-        /*axios.post('http://localhost:3000/children', {
-            name: this.state.name,
-            date_birth: this.state.date,
-            address: this.state.address,
-            evil: this.state.evil
-          })
-          .then(res => {
-              console.log(res);
-              window.alert("Children Added");
-              this.props.history.push(`/children-list`);
-          })
-          .catch(err => {
-              console.log(err);
-              window.alert("Error");
-          });*/
     }
 
     return(
@@ -148,7 +148,7 @@ function EditChild(props){
             <Menu />
             <Grid container direction="column" justify="center" alignItems="center">
                 <Typography variant="h3" gutterBottom>
-                    Nombre Niño
+                    {name}
                 </Typography>
                 <Typography variant="subtitle1" gutterBottom>
                     Por favor introduce los datos siguientes:
@@ -160,6 +160,7 @@ function EditChild(props){
                         required
                         fullWidth
                         id="name"
+                        value={name}
                         label="Nombre"
                         margin="normal"
                         variant="outlined"
@@ -170,6 +171,7 @@ function EditChild(props){
                     <TextField
                         fullWidth
                         id="date"
+                        value={date_birth}
                         label="Fecha Nacimiento"
                         type="date"
                         defaultValue={date_birth}
@@ -184,19 +186,31 @@ function EditChild(props){
                         required
                         fullWidth
                         id="address"
+                        value={address}
                         label="Dirección"
                         margin="normal"
                         variant="outlined"
                         onChange={(e) => setAddress(e.target.value)}
                     />
                 </Grid>
-                <Grid item xs={12} md={1} className={classes.switch}>
-                    <FormControlLabel
-                        control={
-                        <Switch checked={evil} onChange={(e) => setEvil(!evil)} value="checkedA" />
-                        }
-                        label="Maldad"
-                    />
+                <Grid item xs={12} md={1}>
+                    <Grid container direction="column" justify="center" alignItems="center">
+                        <Grid item xs={12}>
+                            <span>Maldad</span>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <ToggleButton
+                                value="check"
+                                selected={evil}
+                                onChange={() => {
+                                    setEvil(!evil);
+                                }}
+                            >
+                                <CheckIcon color={evil ? "error": "primary"} />
+                            </ToggleButton>
+                        </Grid>
+                    </Grid>
+                    
                 </Grid>
             </Grid>
             <Grid
@@ -227,5 +241,4 @@ function EditChild(props){
         </div>
     );
 }
-
 export default EditChild;

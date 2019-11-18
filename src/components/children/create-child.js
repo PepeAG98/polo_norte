@@ -122,27 +122,23 @@ function CreateChild(props){
         if(name == '' || date_birth == '' || address == '' ) {
             setOpen(true);
         } else {
-            console.log(name, date_birth, address, evil);
+            axios.post('https://santa-api-ldaw.herokuapp.com/children', {
+            name: name,
+            date_birth: date_birth,
+            address: address,
+            evil: evil
+          })
+          .then(res => {
             swal("Niño Agregado", `${name} ha sido agregado`, "success")
             .then(() => {
                 props.history.push('/children-list')
             })
-        }
-        /*axios.post('http://localhost:3000/children', {
-            name: this.state.name,
-            date_birth: this.state.date,
-            address: this.state.address,
-            evil: this.state.evil
-          })
-          .then(res => {
-              console.log(res);
-              window.alert("Children Added");
-              this.props.history.push(`/children-list`);
           })
           .catch(err => {
               console.log(err);
-              window.alert("Error");
-          });*/
+              swal("Error", "Por favor revisa tus datos", "error");
+          });
+        }
     }
 
     return(

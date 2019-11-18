@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
@@ -107,28 +107,26 @@ function Register(props){
 
     //Guardar valores en BD Mongo
     function save(){
-          if(name == '' || username == '' || password == ''){
-            setOpen(true);
-          }
-          else{
-            swal("Usuario Registrado", `${name} has sido registrado`, "success")
-            .then(() => {
-                props.history.push('/');
-            })
-            /*axios.post('http://localhost:3000/users', {
-            name: name,
-            username: username,
-            password: password
+      if(name == '' || username == '' || password == ''){
+        setOpen(true);
+      }
+      else{
+        axios.post('https://santa-api-ldaw.herokuapp.com/users', {
+          name: name,
+          username: username,
+          password: password
+        })
+        .then(res => {
+          swal("Usuario Registrado", `${name} has sido registrado`, "success")
+          .then(() => {
+              props.history.push('/');
           })
-          .then(res => {
-              console.log(res);
-              window.alert("Usuario registrado");
-          })
-          .catch(err => {
-              console.log(err);
-              window.alert("Error");
-          });*/
-          }
+        })
+        .catch(err => {
+            console.log(err);
+            swal("Error", "Por favor revisa tus datos", "error");
+        });
+      }
     }
     return(
         <div className="main">

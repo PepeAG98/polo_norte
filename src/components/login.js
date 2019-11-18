@@ -1,5 +1,5 @@
 import React, { Component, useState } from 'react';
-import { BrowserRouter, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
@@ -107,10 +107,20 @@ function Login(props) {
         if(user == '' || password == '') {
             setOpen(true);
         } else {
-            swal("Login Realizado", `${user} has ingresado al sistema`, "success")
-            .then(() => {
-                props.history.push('/dashboard');
-            })
+            axios.post('https://santa-api-ldaw.herokuapp.com/users/login', {
+                username: user,
+                password: password
+              })
+              .then(res => {
+                swal("Login Realizado", `${user} has ingresado al sistema`, "success")
+                .then(() => {
+                    props.history.push('/dashboard');
+                });
+              })
+              .catch(err => {
+                console.log(err);
+                swal("Error", "Por favor revisa tus datos", "error");
+              });
         }
     }
 
@@ -161,6 +171,11 @@ function Login(props) {
                 <Button variant="contained" color="primary" className={classes.button} onClick={SignIn}>
                     Ingresar
                 </Button>
+            </Grid>
+            <Grid container direction="column" justify="center" alignItems="center">
+                <Typography variant="body1" gutterBottom>
+                    ¿Aún no tienes una cuenta? <Link to="/register"><b>Registrate</b></Link>
+                </Typography>
             </Grid>
             <Snackbar
                 anchorOrigin={{

@@ -10,74 +10,20 @@ import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import AddIcon from '@material-ui/icons/Add';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import ListItemText from '@material-ui/core/ListItemText';
+import Avatar from '@material-ui/core/Avatar';
+import IconButton from '@material-ui/core/IconButton';
+import FormGroup from '@material-ui/core/FormGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
+import CardGiftcardIcon from '@material-ui/icons/CardGiftcard';
 import swal from 'sweetalert';
 const axios = require('axios');
-
-/*class ChildrenList extends Component {
-    constructor(props){
-        super(props);
-        this.state = {
-            data: []
-        }
-    }
-
-    componentDidMount(){
-        axios.get('http://localhost:3000/children')
-        .then(res => {
-            console.log(res.data.children);
-            this.setState({
-                data: res.data.children
-            });
-        })
-        .catch(err => {
-            console.log(err);
-        });
-        //console.log(this.state.data);
-    }
-
-    delete(child){
-        console.log(`Voy a borrar: ${child}`);
-        axios.delete(`http://localhost:3000/children/${child}`)
-        .catch(err => {
-            console.log(err);
-        })
-    }
-
-    render(){
-        return(
-            <div className="row">
-                <div className="col s12 l8 offset-l2">
-                    <h5 className="center-align">Children List</h5>
-                    <table className="striped">
-                        <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Birth Date</th>
-                            <th>Address</th>
-                            <th>Evil</th>
-                            <th>Edit</th>
-                            <th>Delete</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {this.state.data.map((children, index) => {
-                            return(<tr key={index}>
-                                <td>{children.name}</td>
-                                <td>{children.date_birth}</td>
-                                <td>{children.address}</td>
-                                <td>{children.evil.toString()}</td>
-                                <td><Link to={`/edit-child/${children._id}`}><i className="material-icons">edit</i></Link></td>
-                                <td><i className="material-icons" onClick={() => this.delete(children._id)}>delete</i></td>
-                            </tr>
-                            )
-                        })}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        )
-    }
-}*/
 
 //Solo Ejemplo
 const useStyles = makeStyles(theme => ({
@@ -86,11 +32,21 @@ const useStyles = makeStyles(theme => ({
     },
     root: {
         width: '100%',
-      },
+    },
     heading: {
         fontSize: theme.typography.pxToRem(15),
         fontWeight: theme.typography.fontWeightRegular,
     },
+    rootList: {
+        flexGrow: 1,
+        maxWidth: 752,
+      },
+      demo: {
+        backgroundColor: theme.palette.background.paper,
+      },
+      title: {
+        margin: theme.spacing(4, 0, 2),
+      },
 }));
 
 function LetterList(props){
@@ -132,7 +88,7 @@ function LetterList(props){
         <div className="main">
             <Menu />
             <Grid container direction="column" justify="flex-end" alignItems="flex-end">
-                <Link to="/create-child"><Button
+                <Link to="/create-letter"><Button
                     variant="contained"
                     color="primary"
                     size="small"
@@ -145,46 +101,32 @@ function LetterList(props){
             <Grid container direction="column" justify="center" alignItems="stretch">
                 <Grid item xs={12}>
                     <div className={classes.root}>
-                            <ExpansionPanel>
-                                <ExpansionPanelSummary
-                                expandIcon={<ExpandMoreIcon />}
-                                aria-controls="panel1a-content"
-                                id="panel1a-header"
-                                >
-                                <Typography className={classes.heading}>Expansion Panel 1</Typography>
-                                </ExpansionPanelSummary>
-                                <ExpansionPanelDetails>
-                                <Typography>
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,
-                                    sit amet blandit leo lobortis eget.
-                                </Typography>
-                                </ExpansionPanelDetails>
-                            </ExpansionPanel>
-                            <ExpansionPanel>
-                                <ExpansionPanelSummary
-                                expandIcon={<ExpandMoreIcon />}
-                                aria-controls="panel2a-content"
-                                id="panel2a-header"
-                                >
-                                <Typography className={classes.heading}>Expansion Panel 2</Typography>
-                                </ExpansionPanelSummary>
-                                <ExpansionPanelDetails>
-                                <Typography>
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,
-                                    sit amet blandit leo lobortis eget.
-                                </Typography>
-                                </ExpansionPanelDetails>
-                            </ExpansionPanel>
-                            <ExpansionPanel disabled>
-                                <ExpansionPanelSummary
-                                expandIcon={<ExpandMoreIcon />}
-                                aria-controls="panel3a-content"
-                                id="panel3a-header"
-                                >
-                                <Typography className={classes.heading}>Disabled Expansion Panel</Typography>
-                                </ExpansionPanelSummary>
-                            </ExpansionPanel>
-                        </div>
+                        <ExpansionPanel>
+                            <ExpansionPanelSummary
+                            expandIcon={<ExpandMoreIcon />}
+                            aria-controls="panel1a-content"
+                            id="panel1a-header"
+                            >
+                            <Typography className={classes.heading}>Carlos Erasmo Téllez Espejel</Typography>
+                            </ExpansionPanelSummary>
+                            <ExpansionPanelDetails>
+                            <div className={classes.demo}>
+                                <List dense={true}>
+                                    <ListItem>
+                                    <ListItemAvatar>
+                                        <Avatar>
+                                        <CardGiftcardIcon />
+                                        </Avatar>
+                                    </ListItemAvatar>
+                                    <ListItemText
+                                        primary="Balón"
+                                    />
+                                    </ListItem>
+                                </List>
+                            </div>
+                            </ExpansionPanelDetails>
+                        </ExpansionPanel>
+                    </div>
                 </Grid>
             </Grid>
         </div>
