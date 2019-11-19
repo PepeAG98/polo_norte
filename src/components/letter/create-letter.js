@@ -9,6 +9,9 @@ import Select from '@material-ui/core/Select';
 import TextField from '@material-ui/core/TextField';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
+import DoneIcon from '@material-ui/icons/Done';
+import Button from '@material-ui/core/Button';
+import swal from 'sweetalert';
 import Menu from '../menu';
 const axios = require('axios');
 
@@ -109,10 +112,36 @@ const useStyles = makeStyles(theme => ({
       }
   }));
 
+function Gift(){
+    const classes = useStyles();
+    return(
+        <Grid container direction="row" justify="center" alignItems="center">
+            <Grid item xs={11}>
+                <TextField
+                    fullWidth
+                    id="outlined-basic"
+                    className={classes.textField}
+                    label="Regalo"
+                    margin="normal"
+                    variant="outlined"
+                    onChange={this.props.addGift}
+                />
+            </Grid>
+            <Grid item xs={1} style={{paddingLeft: 15}}>
+            <Fab color="primary" aria-label="add" className={classes.fab}>
+                <AddIcon />
+            </Fab>
+            </Grid>
+        </Grid>
+    );
+}
+
 function CreateLetter(props) {
     const classes = useStyles();
     const [children, setChildren] = useState([]);
-    const [child, setChild] = useState('Selecciona un niño');
+    const [child, setChild] = useState('');
+    let [gifts, setGifts] = useState([]);
+    let numGifts = 1;
   
     const inputLabel = React.useRef(null);
     const [labelWidth, setLabelWidth] = React.useState(0);
@@ -123,6 +152,13 @@ function CreateLetter(props) {
             setChildren(res.data.result);
         })
     }, []);
+
+    function save() {
+        if(child == "") 
+            swal("Error", "Selecciona un niño para continuar", "error");
+        console.log(child);
+    }
+
     return(
         <div className="row">
             <Menu />
@@ -147,25 +183,21 @@ function CreateLetter(props) {
                         </Select>
                     </FormControl>
                 </Grid>
-                <Grid item xs={12}>
-                    <Grid container direction="row" justify="center" alignItems="center">
-                        <Grid item xs={10} lg={10}>
-                            <TextField
-                                fullWidth
-                                id="outlined-basic"
-                                className={classes.textField}
-                                label="Regalo"
-                                margin="normal"
-                                variant="outlined"
-                            />
-                        </Grid>
-                        <Grid item xs={2}>
-                        <Fab color="primary" aria-label="add" className={classes.fab}>
-                            <AddIcon />
-                        </Fab>
-                        </Grid>
-                    </Grid>
-                </Grid>
+                {
+                    //Aqui van los inputs
+                }
+            </Grid>
+            <Grid container direction="column" justify="flex-end" alignItems="flex-end">
+                <Button
+                    variant="contained"
+                    color="primary"
+                    size="small"
+                    className={classes.button}
+                    startIcon={<DoneIcon />}
+                    onClick={save}
+                >
+                    Agregar Carta
+                </Button>
             </Grid>
         </div>
     );
