@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -6,6 +6,9 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import TextField from '@material-ui/core/TextField';
+import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add';
 import Menu from '../menu';
 const axios = require('axios');
 
@@ -98,44 +101,71 @@ const useStyles = makeStyles(theme => ({
     selectEmpty: {
       marginTop: theme.spacing(2),
     },
+    textField: {
+        marginLeft: 10
+    },
+    fab: {
+        margin: theme.spacing(1),
+      }
   }));
 
 function CreateLetter(props) {
     const classes = useStyles();
-    const [age, setAge] = React.useState('');
+    const [children, setChildren] = useState([]);
+    const [child, setChild] = useState('Selecciona un niño');
   
     const inputLabel = React.useRef(null);
     const [labelWidth, setLabelWidth] = React.useState(0);
-    React.useEffect(() => {
-      setLabelWidth(inputLabel.current.offsetWidth);
+    useEffect(() => {
+        setLabelWidth(inputLabel.current.offsetWidth);
+        axios.get('https://santa-api-ldaw.herokuapp.com/children')
+        .then(res => {
+            setChildren(res.data.result);
+        })
     }, []);
-  
-    const handleChange = event => {
-      setAge(event.target.value);
-    };
     return(
         <div className="row">
             <Menu />
             <Grid container direction="column" justify="center" alignItems="flex-start">
-                <FormControl variant="outlined" className={classes.formControl}>
-                    <InputLabel ref={inputLabel} id="demo-simple-select-outlined-label">
-                    Niño
-                    </InputLabel>
-                    <Select
-                    labelId="demo-simple-select-outlined-label"
-                    id="demo-simple-select-outlined"
-                    value={age}
-                    onChange={handleChange}
-                    labelWidth={labelWidth}
-                    >
-                    <MenuItem value="">
-                        <em>Selecciona un niño</em>
-                    </MenuItem>
-                    <MenuItem value={10}>Ten</MenuItem>
-                    <MenuItem value={20}>Twenty</MenuItem>
-                    <MenuItem value={30}>Thirty</MenuItem>
-                    </Select>
-                </FormControl>
+                <Grid item xs={12}>
+                    <FormControl variant="outlined" className={classes.formControl}>
+                        <InputLabel ref={inputLabel} id="demo-simple-select-outlined-label">
+                        Niño
+                        </InputLabel>
+                        <Select
+                            labelId="demo-simple-select-outlined-label"
+                            id="demo-simple-select-outlined"
+                            value={child}
+                            onChange={(e) => setChild(e.target.value)}
+                            labelWidth={labelWidth}
+                            >
+                            {children.map((child, index) => {
+                                return(
+                                    <MenuItem key={index} value={child._id}>{child.name}</MenuItem>
+                                );
+                            })}
+                        </Select>
+                    </FormControl>
+                </Grid>
+                <Grid item xs={12}>
+                    <Grid container direction="row" justify="center" alignItems="center">
+                        <Grid item xs={10} lg={10}>
+                            <TextField
+                                fullWidth
+                                id="outlined-basic"
+                                className={classes.textField}
+                                label="Regalo"
+                                margin="normal"
+                                variant="outlined"
+                            />
+                        </Grid>
+                        <Grid item xs={2}>
+                        <Fab color="primary" aria-label="add" className={classes.fab}>
+                            <AddIcon />
+                        </Fab>
+                        </Grid>
+                    </Grid>
+                </Grid>
             </Grid>
         </div>
     );

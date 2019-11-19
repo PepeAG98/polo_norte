@@ -23,6 +23,7 @@ import { ToggleButton } from '@material-ui/lab';
 import swal from 'sweetalert';
 const axios = require('axios');
 
+/*
 //Estilos para Inputs desde Material UI
 const useStyles = makeStyles(theme => ({
     textField: {
@@ -42,6 +43,7 @@ const useStyles = makeStyles(theme => ({
     }
   }));
 
+  
  //Estilos para Mensaje de Error
  const useStyles1 = makeStyles(theme => ({
     error: {
@@ -102,12 +104,13 @@ MySnackbarContentWrapper.propTypes = {
     info: InfoIcon,
   };
 
-function EditChild(props){
+/*function EditChild(props){
     const classes = useStyles();
     let [name, setName] = useState('');
     let [date_birth, setDateBirth] = useState('2019-01-01');
     let [address, setAddress] = useState('');
     let [evil, setEvil] = useState(false);
+    let [data, setData] = useState([]);
     //Manejar Wrapper
     const [open, setOpen] = React.useState(false);
     const handleClose = (event, reason) => {
@@ -119,17 +122,21 @@ function EditChild(props){
 
     useEffect(() => {
         console.log(props.match.params.id);
-        axios.get(`https://santa-api-ldaw.herokuapp.com/children/${props.match.params.id}`)
-        .then(res => {
-            setName(res.data.children.name);
-            setDateBirth(res.data.children.date_birth);
-            setAddress(res.data.children.address);
-            setEvil(res.data.children.evil);
-        })
-        .catch(err => {
-            console.log(err);
-        }, [name, date_birth, address, evil]);
-    })
+        async function fetch() {
+            await axios.get(`https://santa-api-ldaw.herokuapp.com/children/${props.match.params.id}`)
+            .then(res => {
+                setData(res.data.children);
+            })
+            .catch(err => {
+                console.log(err);
+            });
+        }   
+        fetch();
+        setName(data.name);
+        setDateBirth(data.date_birth);
+        setAddress(data.address);
+        setEvil(data.evil);
+    }, [data, fetch]);
 
     function save(){
         if(name == '' || date_birth == '' || address == '' ) {
@@ -177,7 +184,6 @@ function EditChild(props){
                         defaultValue={date_birth}
                         variant="outlined"
                         className={classes.textField}
-                        
                         onChange={(e) => setDateBirth(e.target.value)}
                     />
                 </Grid>
@@ -240,5 +246,164 @@ function EditChild(props){
             </Snackbar>
         </div>
     );
+}*/
+
+class EditChild extends Component{
+    constructor(props) {
+        super(props);
+        this.state = {
+            id: this.props.match.params.id,
+            name: '',
+            date: '2019-01-01',
+            address: '',
+            evil: false
+        }
+        this.handleName = this.handleName.bind(this);
+        this.handleDate = this.handleDate.bind(this);
+        this.handleAddress = this.handleAddress.bind(this);
+        this.handleEvil = this.handleEvil.bind(this);
+        this.edit = this.edit.bind(this);
+    }
+
+    componentDidMount() {
+        axios.get(`https://santa-api-ldaw.herokuapp.com/children/${this.state.id}`)
+        .then(res => {
+            this.setState({
+                name: res.data.children.name,
+                date: res.data.children.date_birth,
+                address: res.data.children.address,
+                evil: res.data.children.evil
+            });
+        })
+        .catch(err => {
+            console.log(err);
+        })
+    }
+
+    handleName(event) {
+        this.setState({
+            name: event.target.value
+        });
+    }
+
+    handleDate(event) {
+        this.setState({
+            date: event.target.value
+        });
+    }
+
+    handleAddress(event) {
+        this.setState({
+            address: event.target.value
+        });
+    }
+
+    handleEvil(event) {
+        this.setState({
+            evil: event.target.value
+        });
+    }
+
+    edit() {
+        if(this.state.name == '' || this.state.date == '' || this.state.address == '') {
+            swal("Error", "Ningún dato puede estar en blanco", "error");
+        } else {
+            axios.put(`https://santa-api-ldaw.herokuapp.com/children/${this.state.id}`, {
+                name: this.state.name,
+                date_birth: this.state.date,
+                address: this.state.address,
+                evil: this.state.evil
+              })
+              .then(res => {
+                  swal("Información Actualizada", `Los datos de ${this.state.name} se han actualizado`, "success")
+                  .then(() => {
+                    this.props.history.push('/children-list')
+                  })
+              })
+        }
+    }
+
+    render() {
+        return(
+            <div className="main">
+            <Menu />
+            <Grid container direction="column" justify="center" alignItems="center">
+                <Typography variant="h3" gutterBottom>
+                    {this.state.name}
+                </Typography>
+                <Typography variant="subtitle1" gutterBottom>
+                    Por favor introduce los datos siguientes:
+                </Typography>
+            </Grid>
+            <Grid container direction="row" justify="center" alignItems="stretch">
+                <Grid item xs={12} lg={12}>
+                    <TextField
+                        required
+                        fullWidth
+                        id="name"
+                        value={this.state.name}
+                        label="Nombre"
+                        margin="normal"
+                        variant="outlined"
+                        onChange={this.handleName}
+                    />
+                </Grid>
+                <Grid item xs={12} md={4} style={{paddingRight: 40, paddingLeft: 0, paddingTop: 15}}>
+                    <TextField
+                        fullWidth
+                        id="date"
+                        value={this.state.date}
+                        label="Fecha Nacimiento"
+                        type="date"
+                        defaultValue={this.state.date}
+                        variant="outlined"
+                        onChange={this.handleDate}
+                    />
+                </Grid>
+                <Grid item xs={12} md={7}>
+                    <TextField
+                        required
+                        fullWidth
+                        id="address"
+                        value={this.state.address}
+                        label="Dirección"
+                        margin="normal"
+                        variant="outlined"
+                        onChange={this.handleAddress}
+                    />
+                </Grid>
+                <Grid item xs={12} md={1}>
+                    <Grid container direction="column" justify="center" alignItems="center">
+                        <Grid item xs={12}>
+                            <span>Maldad</span>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <ToggleButton
+                                value="check"
+                                selected={this.state.evil}
+                                onChange={() => {
+                                    this.setState({evil: !this.state.evil});
+                                }}
+                            >
+                                <CheckIcon color={this.state.evil ? "error": "primary"} />
+                            </ToggleButton>
+                        </Grid>
+                    </Grid>
+                    
+                </Grid>
+            </Grid>
+            <Grid
+                container
+                direction="row"
+                justify="flex-end"
+                alignItems="center"
+            >
+                <Button variant="contained" color="primary" onClick={this.edit}>
+                    Registrar
+                </Button>
+            </Grid>
+        </div>
+        );
+    }
 }
 export default EditChild;
