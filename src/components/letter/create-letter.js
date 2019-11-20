@@ -15,86 +15,143 @@ import swal from 'sweetalert';
 import Menu from '../menu';
 const axios = require('axios');
 
-/*class CreateLetter extends Component {
+class CreateLetter extends Component {
     constructor(props){
         super(props);
         this.state = {
             children: [],
             child: '',
             date_letter: '',
-            gifts: []
+            gifts: ['']
         }
         this.save = this.save.bind(this);
         this.myChild = this.myChild.bind(this);
-        this.myDate = this.myDate.bind(this);
         this.addGifts = this.addGifts.bind(this);
+        this.myGift = this.myGift.bind(this);
     }
 
     componentDidMount(){
-        axios.get('http://localhost:3000/children/')
+        axios.get('https://santa-api-ldaw.herokuapp.com/children')
         .then(res => {
-            console.log(res.data.children);
             this.setState({
-                children: res.data.children
+                children: res.data.result
             });
         })
         .catch(err => {
             console.log(err);
         });
+        let myDate = `${new Date().getFullYear()}-${new Date().getMonth()}-${new Date().getDate()}`;
+        this.setState({
+            date_letter: myDate
+        });
     }
 
     save(){
-
+        if(this.state.child == '' || this.state.date_letter == '' || this.state.gifts[0] == "")
+            swal("Error", "Ningun campo debe estar vacio", "error");
+        else {
+            axios.post('https://santa-api-ldaw.herokuapp.com/letter', {
+            children: this.state.child,
+            date_of_letter: this.state.date_letter,
+            gifts: this.state.gifts
+          })
+          .then(res => {
+            swal("Carta Agregada", "La carta ha sido agregada", "success")
+            .then(() => {
+                this.props.history.push('/letter-list')
+            })
+          })
+          .catch(err => {
+              console.log(err);
+              swal("Error", "Por favor revisa tus datos", "error");
+          });
+        }
     }
 
-    myChild(){
-
-    }
-
-    myDate(){
-
+    myChild(event){
+        this.setState({
+            child: event.target.value
+        });
     }
 
     addGifts(){
+        this.setState({
+            gifts: [...this.state.gifts, '']
+        })
+    }
 
+    myGift(event, indice) {
+        this.state.gifts[indice] = event.target.value;
     }
 
     render(){
         return(
             <div className="row">
-                <div className="col s12 l8 offset-l2">
-                    <div className="row">
-                    <div className="input-field col s12 l9">
-                    <select className="browser-default">
-                        <option value="" disabled selected>Choose your name</option>
-                        {this.state.children.map((child, index) => {
-                            return <option key={index} value={child._id}>{child.name}</option>;
-                        })}
-                    </select>
-                    </div>
-                        <div className="input-field col s12 l3">
-                            <i className="material-icons prefix">account_circle</i>
-                            <input id="date" type="date" className="validate" onChange={this.myDate} />
-                            <label htmlFor="date">Date Letter</label>
-                        </div>
-                        <div className="input-field col s12 l12">
-                            <div className="row">
-                                <div className="input-field col s11">
-                                    <i className="material-icons prefix">shopping_basket</i>
-                                    <input id="gift" type="text" className="validate" onChange={this.addGifts} />
-                                    <label htmlFor="date">Gift</label>
-                                </div>
-                                <div className="input-field col s1">
-                                    <a class="btn-floating waves-effect waves-light red"><i class="material-icons">add</i></a>
-                                </div>
+                <Menu />
+                <Grid container direction="column" justify="center" alignItems="flex-start">
+                    <Grid item xs={12}>
+                        <FormControl variant="outlined" style={{margin: 10, minWidth: 300}}>
+                            <InputLabel id="demo-simple-select-outlined-label">
+                            Niño
+                            </InputLabel>
+                            <Select
+                                labelId="demo-simple-select-outlined-label"
+                                id="demo-simple-select-outlined"
+                                onChange={this.myChild}
+                                >
+                                {this.state.children.map((child, index) => {
+                                    return(
+                                        <MenuItem key={index} value={child._id}>{child.name}</MenuItem>
+                                    );
+                                })}
+                            </Select>
+                        </FormControl>
+                    </Grid>
+                    
+                    {this.state.gifts.map((gift, ind) => {
+                        return(
+                            <div key={ind}>
+                                <Grid container direction="row" justify="center" alignItems="center">
+                                    <Grid item xs={11} style={{paddingRight: 20, paddingLeft: 20}} key={ind}>
+                                        <TextField
+                                            fullWidth
+                                            id="outlined-basic"
+                                            label="Regalo"
+                                            margin="normal"
+                                            variant="outlined"
+                                            style={{width: '100%'}}
+                                            onChange={(e) => this.myGift(e, ind)}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={1} style={{paddingLeft: 15}}>
+                                        <Fab color="primary" aria-label="add" style={{margin: 10}} onClick={this.addGifts}>
+                                            <AddIcon />
+                                        </Fab>
+                                    </Grid>
+                                </Grid>
                             </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        )
+                        );
+                    })}
+                
+                <Grid container direction="column" justify="flex-end" alignItems="flex-end">
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        size="small"
+                        style={{margin: 10}}
+                        startIcon={<DoneIcon />}
+                        onClick={this.save}
+                    >
+                        Agregar Carta
+                    </Button>
+                </Grid>
+            </Grid>
+        </div>
+        );
     }
-}*/
+}
+
+/*
 
 const useStyles = makeStyles(theme => ({
     formControl: {
@@ -199,6 +256,6 @@ function CreateLetter(props) {
             </Grid>
         </div>
     );
-}
+}*/
 
 export default CreateLetter;

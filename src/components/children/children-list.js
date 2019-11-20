@@ -125,7 +125,7 @@ class ChildrenList extends Component {
                                             </TableCell>
                                         </TableRow>
                                     );
-                                }): <Typography variant="h4" gutterBottom>No hay niños</Typography>}
+                                }): <TableRow><TableCell><Typography variant="h4" gutterBottom>No hay niños</Typography></TableCell></TableRow>}
                                 </TableBody>
                             </Table>
                         </Paper>
