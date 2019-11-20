@@ -124,7 +124,7 @@ function Gift(){
                     label="Regalo"
                     margin="normal"
                     variant="outlined"
-                    onChange={this.props.addGift}
+                    
                 />
             </Grid>
             <Grid item xs={1} style={{paddingLeft: 15}}>
@@ -183,9 +183,7 @@ function CreateLetter(props) {
                         </Select>
                     </FormControl>
                 </Grid>
-                {
-                    //Aqui van los inputs
-                }
+                <Gift />
             </Grid>
             <Grid container direction="column" justify="flex-end" alignItems="flex-end">
                 <Button

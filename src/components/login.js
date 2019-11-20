@@ -17,6 +17,8 @@ import WarningIcon from '@material-ui/icons/Warning';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import swal from 'sweetalert';
+import Cookies from 'universal-cookie';
+const cookies = new Cookies();
 const axios = require('axios');
 
 /*
@@ -209,6 +211,14 @@ class Login extends Component {
     this.doLogin = this.doLogin.bind(this);
   }
 
+  componentDidMount() {
+    if(cookies.get('isLogin') == 'true')
+      swal("Usuario Logeado", "Usted ya ingreso al sistema", "success")
+      .then(() => {
+        this.props.history.push('/dashboard');
+      });
+  }
+
   myUser(event) {
     this.setState({
       user: event.target.value
@@ -232,6 +242,7 @@ class Login extends Component {
         .then(res => {
           swal("Login Realizado", `${this.state.user} has ingresado al sistema`, "success")
           .then(() => {
+              cookies.set('isLogin', 'true', { path: '/' });
               this.props.history.push('/dashboard');
           });
         })

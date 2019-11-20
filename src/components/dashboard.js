@@ -9,8 +9,10 @@ import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import GroupIcon from '@material-ui/icons/Group';
 import PostAddIcon from '@material-ui/icons/PostAdd';
 import DescriptionIcon from '@material-ui/icons/Description';
+import Cookies from 'universal-cookie';
 import './styles/dashboard.css';
-
+import swal from 'sweetalert';
+const cookies = new Cookies();
 /*
 const useStyles = makeStyles(theme => ({
     root: {
@@ -77,7 +79,17 @@ function Dashboard(props) {
     )
 }*/
 
+
 class Dashboard extends Component {
+    componentDidMount(){
+        if(cookies.get('isLogin') != "true"){
+            swal("Usuario no valido", "Por favor ingresa al sistema", "error")
+            .then(() => {
+                this.props.history.push('/');
+            });
+        }
+    }
+
     render() {
         return(
             <div className="main">

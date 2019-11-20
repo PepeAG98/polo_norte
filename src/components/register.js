@@ -17,6 +17,8 @@ import WarningIcon from '@material-ui/icons/Warning';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import swal from 'sweetalert';
+import Cookies from 'universal-cookie';
+const cookies = new Cookies();
 const axios = require('axios');
  
 /*
@@ -221,6 +223,15 @@ class Register extends Component {
     this.myUser = this.myUser.bind(this);
     this.myPsw = this.myPsw.bind(this);
     this.save = this.save.bind(this);
+  }
+
+  componentDidMount() {
+    if(cookies.get('isLogin') == "true"){
+      swal("Usuario valido", "Usted ya tiene una cuenta", "success")
+      .then(() => {
+          this.props.history.push('/dashboard');
+      });
+    }
   }
 
   myName(event) {

@@ -1,5 +1,5 @@
-import React, { Component, setState } from 'react';
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import React, { Component, setState, useEffect } from 'react';
+import { BrowserRouter as Router, Route, Link, Redirect } from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -21,8 +21,12 @@ import DraftsIcon from '@material-ui/icons/Drafts';
 import ChildCareIcon from '@material-ui/icons/ChildCare';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import DashboardIcon from '@material-ui/icons/Dashboard';
+import TrendingFlatIcon from '@material-ui/icons/TrendingFlat';
 import { decorator } from '@babel/types';
 import '../App.css';
+import Cookies from 'universal-cookie';
+import swal from 'sweetalert';
+const cookies = new Cookies();
 
 const useStyles = makeStyles({
     root: {
@@ -40,7 +44,7 @@ const useStyles = makeStyles({
     }
   });
 
-export default function Menu() {
+export default function Menu(props) {
     const classes = useStyles();
     const [state, setState] = React.useState({
         top: false,
@@ -83,6 +87,12 @@ export default function Menu() {
           </ListItemIcon>
           <ListItemText primary="Cartas" />
         </ListItem>
+        <ListItem button>
+          <ListItemIcon>
+            <TrendingFlatIcon />
+          </ListItemIcon>
+          <ListItemText primary="Salir" />
+        </ListItem>
       </List>
       <Divider />
     </div>
@@ -114,10 +124,21 @@ export default function Menu() {
           </ListItemIcon>
           <ListItemText primary="Dashboard" />
         </ListItem></Link>
+        {cookies.get('isLogin') ?<ListItem button onClick={SignOut}>
+          <ListItemIcon>
+            <TrendingFlatIcon />
+          </ListItemIcon>
+          <ListItemText primary="Salir" />
+        </ListItem>: ''}
       </List>
       <Divider />
     </div>
   );
+
+  function SignOut() {
+    cookies.set('isLogin', 'false', { path: '/' });
+    //props.history.push('/');
+  }
 
     return(
         <AppBar position="static">
@@ -134,6 +155,7 @@ export default function Menu() {
                     <Link to="/dashboard"><Button startIcon={<DashboardIcon/>} color="inherit">Dashboard</Button></Link>
                     <Link to="/children-list"><Button startIcon={<ChildCareIcon/>} color="inherit">Niños</Button></Link>
                     <Link to="/letter-list"><Button startIcon={<AssignmentIcon/>} color="inherit">Cartas</Button></Link>
+                    {cookies.get('isLogin') ? <Button startIcon={<TrendingFlatIcon/>} onClick={SignOut} color="inherit">Salir</Button>: ''}
                 </Hidden>
                 
             </Toolbar>
