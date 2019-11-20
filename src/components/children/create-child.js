@@ -24,6 +24,7 @@ import { ToggleButton } from '@material-ui/lab';
 import swal from 'sweetalert';
 const axios = require('axios');
 
+/*
 //Estilos para Inputs desde Material UI
 const useStyles = makeStyles(theme => ({
     textField: {
@@ -235,6 +236,142 @@ function CreateChild(props){
             </Snackbar>
         </div>
     );
+}*/
+
+class CreateChild extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            name: '',
+            date: '2019-01-01',
+            address: '',
+            evil: false
+        }
+        this.myName = this.myName.bind(this);
+        this.myDate = this.myDate.bind(this);
+        this.myAddress = this.myAddress.bind(this);
+        this.save = this.save.bind(this);
+    }
+
+    myName(event) {
+        this.setState({
+            name: event.target.value
+        });
+    }
+
+    myDate(event) {
+        this.setState({
+            date: event.target.value
+        });
+    }
+
+    myAddress(event) {
+        this.setState({
+            address: event.target.value
+        });
+    }
+
+    save() {
+        if(this.state.name == '' || this.state.date == '' || this.state.address == '' ) {
+            swal("Error", "No puede haber ningún campo en blanco", "error");
+        } else {
+            axios.post('https://santa-api-ldaw.herokuapp.com/children', {
+            name: this.state.name,
+            date_birth: this.state.date,
+            address: this.state.address,
+            evil: this.state.evil
+          })
+          .then(res => {
+            swal("Niño Agregado", `${this.state.name} ha sido agregado`, "success")
+            .then(() => {
+                this.props.history.push('/children-list')
+            })
+          })
+          .catch(err => {
+              console.log(err);
+              swal("Error", "Por favor revisa tus datos", "error");
+          });
+        }
+    }
+
+    render() {
+        return(
+            <div className="main">
+                <Menu />
+                <Grid container direction="column" justify="center" alignItems="center">
+                    <Typography variant="h3" gutterBottom>
+                        Registrar Niño
+                    </Typography>
+                    <Typography variant="subtitle1" gutterBottom>
+                        Por favor introduce los datos siguientes:
+                    </Typography>
+                </Grid>
+                <Grid container direction="row" justify="center" alignItems="stretch">
+                    <Grid item xs={12} lg={12} style={{addingRight: 20, paddingLeft: 20}}>
+                        <TextField
+                            required
+                            fullWidth
+                            id="name"
+                            label="Nombre"
+                            margin="normal"
+                            variant="outlined"
+                            onChange={this.myName}
+                        />
+                    </Grid>
+                    <Grid item xs={12} md={4} style={{paddingRight: 40, paddingLeft: 0, paddingTop: 15}}>
+                        <TextField
+                            fullWidth
+                            id="date"
+                            label="Fecha Nacimiento"
+                            type="date"
+                            defaultValue={this.state.date}
+                            variant="outlined"
+                            style={{addingRight: 20, paddingLeft: 20}}
+                            onChange={this.myDate}
+                        />
+                    </Grid>
+                    <Grid item xs={12} md={7} style={{addingRight: 20, paddingLeft: 20}}>
+                        <TextField
+                            required
+                            fullWidth
+                            id="address"
+                            label="Dirección"
+                            margin="normal"
+                            variant="outlined"
+                            onChange={this.myAddress}
+                        />
+                    </Grid>
+                    <Grid item xs={12} md={1}>
+                        <Grid container direction="column" justify="center" alignItems="center">
+                            <Grid item xs={12}>
+                                <span>Maldad</span>
+                            </Grid>
+                            <Grid item xs={12}>
+                                <ToggleButton
+                                    value="check"
+                                    selected={this.state.evil}
+                                    onChange={() => this.setState({evil: !this.state.evil})}
+                                >
+                                    <CheckIcon color={this.state.evil ? "error": "primary"} />
+                                </ToggleButton>
+                            </Grid>
+                        </Grid>
+                        
+                    </Grid>
+                </Grid>
+                <Grid
+                    container
+                    direction="row"
+                    justify="flex-end"
+                    alignItems="center"
+                >
+                    <Button variant="contained" color="primary" style={{margin: 20}} onClick={this.save}>
+                        Registrar
+                    </Button>
+                </Grid>
+            </div>
+        );
+    }
 }
 
 export default CreateChild;

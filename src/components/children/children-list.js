@@ -15,10 +15,11 @@ import Paper from '@material-ui/core/Paper';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import IconButton from '@material-ui/core/IconButton';
+import Typography from '@material-ui/core/Typography';
 import swal from 'sweetalert';
 const axios = require('axios');
 
-/*class ChildrenList extends Component {
+class ChildrenList extends Component {
     constructor(props){
         super(props);
         this.state = {
@@ -27,62 +28,115 @@ const axios = require('axios');
     }
 
     componentDidMount(){
-        axios.get('http://localhost:3000/children')
+        axios.get('https://santa-api-ldaw.herokuapp.com/children')
         .then(res => {
-            console.log(res.data.children);
             this.setState({
-                data: res.data.children
+                data: res.data.result
             });
         })
         .catch(err => {
             console.log(err);
         });
-        //console.log(this.state.data);
+    }
+
+    componentDidUpdate() {
+        axios.get('https://santa-api-ldaw.herokuapp.com/children')
+        .then(res => {
+            this.setState({
+                data: res.data.result
+            });
+        })
+        .catch(err => {
+            console.log(err);
+        });
     }
 
     delete(child){
-        console.log(`Voy a borrar: ${child}`);
-        axios.delete(`http://localhost:3000/children/${child}`)
-        .catch(err => {
-            console.log(err);
+        swal({
+            title: "¿Quieres eliminar a este niño?",
+            text: "Una vez que lo elimines no podrás recuperar la información",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
         })
+        .then((willDelete) => {
+            if (willDelete) {
+                axios.delete(`https://santa-api-ldaw.herokuapp.com/children/${child}`)
+                .then(() => {
+                    swal("Información eliminada", {
+                        icon: "success",
+                    });
+                })
+                .catch(err => {
+                    swal("Error", "No se pudo eliminar", "error");
+                })
+            } else {
+              swal("Eliminación Cancelada");
+            }
+        });
     }
 
     render(){
         return(
-            <div className="row">
-                <div className="col s12 l8 offset-l2">
-                    <h5 className="center-align">Children List</h5>
-                    <table className="striped">
-                        <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Birth Date</th>
-                            <th>Address</th>
-                            <th>Evil</th>
-                            <th>Edit</th>
-                            <th>Delete</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {this.state.data.map((children, index) => {
-                            return(<tr key={index}>
-                                <td>{children.name}</td>
-                                <td>{children.date_birth}</td>
-                                <td>{children.address}</td>
-                                <td>{children.evil.toString()}</td>
-                                <td><Link to={`/edit-child/${children._id}`}><i className="material-icons">edit</i></Link></td>
-                                <td><i className="material-icons" onClick={() => this.delete(children._id)}>delete</i></td>
-                            </tr>
-                            )
-                        })}
-                        </tbody>
-                    </table>
-                </div>
+            <div className="main">
+                <Menu />
+                <Grid container direction="column" justify="flex-end" alignItems="flex-end">
+                    <Link to="/create-child"><Button
+                        variant="contained"
+                        color="primary"
+                        size="small"
+                        style={{margin: 20}}
+                        startIcon={<AddIcon />}
+                    >
+                        Agregar Niño
+                    </Button></Link>
+                </Grid>
+                <Grid container direction="column" justify="center" alignItems="stretch">
+                    <Grid item xs={12}>
+                        <Paper style={{width: '100%', overflowX: 'auto'}}>
+                            <Table stickyHeader style={{minWidth: 'auto'}} aria-label="simple table">
+                                <TableHead>
+                                <TableRow>
+                                    <TableCell align="left">Nombre</TableCell>
+                                    <TableCell align="left">Fecha Nacimiento</TableCell>
+                                    <TableCell align="left">Dirección</TableCell>
+                                    <TableCell align="left">Maldad</TableCell>
+                                    <TableCell align="left">Editar</TableCell>
+                                    <TableCell align="left">Eliminar</TableCell>
+                                </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                {this.state.data.length ? this.state.data.map((row, index) => {
+                                    return(
+                                        <TableRow key={index}>
+                                            <TableCell align="left">{row.name}</TableCell>
+                                            <TableCell align="left">{row.date_birth}</TableCell>
+                                            <TableCell align="left">{row.address}</TableCell>
+                                            <TableCell align="left">{row.evil ? 'Alta': 'Baja'}</TableCell>
+                                            <TableCell align="left">
+                                                <Link to={`edit-child/${row._id}`}><IconButton aria-label="edit">
+                                                    <EditIcon fontSize="small" color="primary" />
+                                                </IconButton></Link>
+                                            </TableCell>
+                                            <TableCell align="left">
+                                                <IconButton aria-label="delete" onClick={() => this.delete(row._id)}>
+                                                    <DeleteIcon fontSize="small" color="error" />
+                                                </IconButton>
+                                            </TableCell>
+                                        </TableRow>
+                                    );
+                                }): <Typography variant="h4" gutterBottom>No hay niños</Typography>}
+                                </TableBody>
+                            </Table>
+                        </Paper>
+                    </Grid>
+                </Grid>
             </div>
-        )
+        );
     }
-}*/
+}
+
+/*
 
 //Solo Ejemplo
 function createData(name, date_birth, address, evil) {
@@ -214,10 +268,6 @@ function ChildrenList(){
             </Grid>
         </div>
     );
-}
+}*/
 
 export default ChildrenList;
-
-/*
-
-                            */

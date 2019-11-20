@@ -19,6 +19,7 @@ import clsx from 'clsx';
 import swal from 'sweetalert';
 const axios = require('axios');
 
+/*
 //Estilos para los Inputs
 const useStyles = makeStyles(theme => ({
 textField: {
@@ -194,6 +195,110 @@ function Login(props) {
             </Snackbar>
         </div>
     );
+}*/
+
+class Login extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      user: '',
+      password: ''
+    }
+    this.myUser = this.myUser.bind(this);
+    this.myPsw = this.myPsw.bind(this);
+    this.doLogin = this.doLogin.bind(this);
+  }
+
+  myUser(event) {
+    this.setState({
+      user: event.target.value
+    });
+  }
+
+  myPsw(event) {
+    this.setState({
+      password: event.target.value
+    });
+  }
+
+  doLogin(){
+    if(this.state.name == "" || this.state.username == "" || this.state.password == "")
+      swal("Error", "Ningún dato puede estar en blanco", "error");
+    else {
+      axios.post('https://santa-api-ldaw.herokuapp.com/users/login', {
+          username: this.state.user,
+          password: this.state.password
+        })
+        .then(res => {
+          swal("Login Realizado", `${this.state.user} has ingresado al sistema`, "success")
+          .then(() => {
+              this.props.history.push('/dashboard');
+          });
+        })
+        .catch(err => {
+          console.log(err);
+          swal("Error", "Por favor revisa tus datos", "error");
+        });
+    }
+  }
+
+  render() {
+    return(
+      <div className="main">
+          <Grid container direction="column" justify="center" alignItems="center">
+              <Typography variant="h3" gutterBottom>
+                  Santa Claus App
+              </Typography>
+              <Typography variant="subtitle1" gutterBottom>
+                  Por favor introduce tu nombre de usuario y contraseña
+              </Typography>
+          </Grid>
+          <Grid
+              container
+              direction="column"
+              justify="center"
+              alignItems="stretch"
+          >
+              <Grid item xs={12} lg={12} style={{paddingRight: 20, paddingLeft: 20}}>
+                  <TextField
+                      fullWidth
+                      id="username"
+                      label="Usuario"
+                      margin="normal"
+                      variant="outlined"
+                      onChange={this.myUser}
+                  />
+              </Grid>
+              <Grid item xs={12} lg={12} style={{paddingRight: 20, paddingLeft: 20}}>
+                  <TextField
+                      fullWidth
+                      id="password"
+                      type="password"
+                      label="Contraseña"
+                      margin="normal"
+                      variant="outlined"
+                      onChange={this.myPsw}
+                  />
+              </Grid>
+          </Grid>
+          <Grid
+              container
+              direction="row"
+              justify="flex-end"
+              alignItems="center"
+          >
+              <Button variant="contained" color="primary" style={{margin: 20}} onClick={this.doLogin}>
+                  Ingresar
+              </Button>
+          </Grid>
+          <Grid container direction="column" justify="center" alignItems="center">
+              <Typography variant="body1" gutterBottom>
+                  ¿Aún no tienes una cuenta? <Link to="/register"><b style={{color: 'red'}}>Registrate</b></Link>
+              </Typography>
+          </Grid>
+      </div>
+  );
+  }
 }
 
 export default Login;

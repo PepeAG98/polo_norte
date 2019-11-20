@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, Component } from 'react';
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
@@ -19,6 +19,7 @@ import clsx from 'clsx';
 import swal from 'sweetalert';
 const axios = require('axios');
  
+/*
 //Estilos para Inputs desde Material UI
 const useStyles = makeStyles(theme => ({
     textField: {
@@ -206,6 +207,127 @@ function Register(props){
             </Snackbar>
         </div>
     );
+}*/
+
+class Register extends Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      name: '',
+      username: '',
+      password: ''
+    }
+    this.myName = this.myName.bind(this);
+    this.myUser = this.myUser.bind(this);
+    this.myPsw = this.myPsw.bind(this);
+    this.save = this.save.bind(this);
+  }
+
+  myName(event) {
+    this.setState({
+      name: event.target.value
+    });
+  }
+
+  myUser(event) {
+    this.setState({
+      username: event.target.value
+    });
+  }
+
+  myPsw(event) {
+    this.setState({
+      password: event.target.value
+    });
+  }
+
+  save(){
+    if(this.state.name == "" || this.state.username == "" || this.state.password == "")
+      swal("Error", "Ningún dato puede estar en blanco", "error");
+      else{
+        axios.post('https://santa-api-ldaw.herokuapp.com/users', {
+          name: this.state.name,
+          username: this.state.username,
+          password: this.state.password
+        })
+        .then(res => {
+          swal("Usuario Registrado", `${this.state.name} has sido registrado`, "success")
+          .then(() => {
+              this.props.history.push('/');
+          })
+        })
+        .catch(err => {
+            console.log(err);
+            swal("Error", "Por favor revisa tus datos", "error");
+        });
+      }
+  }
+
+  render() {
+    return(
+      <div className="main">
+          <Grid container direction="column" justify="center" alignItems="center">
+              <Typography variant="h3" gutterBottom>
+                  Registro
+              </Typography>
+              <Typography variant="subtitle1" gutterBottom>
+                  Por favor introduce los datos siguientes:
+              </Typography>
+          </Grid>
+          <Grid
+              container
+              direction="column"
+              justify="center"
+              alignItems="stretch"
+          >
+              <Grid item xs={12} lg={12} style={{paddingRight: 20, paddingLeft: 20}}>
+                  <TextField
+                      required
+                      fullWidth
+                      id="name"
+                      label="Nombre completo"
+                      margin="normal"
+                      variant="outlined"
+                      onChange={this.myName}
+                  />
+              </Grid>
+              <Grid item xs={12} lg={12} style={{paddingRight: 20, paddingLeft: 20}}>
+                  <TextField
+                      required
+                      fullWidth
+                      id="username"
+                      label="Usuario"
+                      margin="normal"
+                      variant="outlined"
+                      onChange={this.myUser}
+                  />
+              </Grid>
+              <Grid item xs={12} lg={12} style={{paddingRight: 20, paddingLeft: 20}}>
+                  <TextField
+                      required
+                      fullWidth
+                      id="password"
+                      type="password"
+                      label="Password"
+                      margin="normal"
+                      variant="outlined"
+                      onChange={this.myPsw}
+                  />
+              </Grid>
+          </Grid>
+          <Grid
+              container
+              direction="row"
+              justify="flex-end"
+              alignItems="center"
+          >
+              <Button variant="contained" color="primary" onClick={this.save} style={{margin: 20}}>
+                  Registrar
+              </Button>
+          </Grid>
+      </div>
+    );
+  }
 }
 
-export default Register
+export default Register;
