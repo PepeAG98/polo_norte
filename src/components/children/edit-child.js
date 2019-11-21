@@ -7,7 +7,9 @@ import Typography from '@material-ui/core/Typography';
 import Checkbox from '@material-ui/core/Checkbox';
 import swal from 'sweetalert';
 import Paper from '@material-ui/core/Paper';
+import Cookies from 'universal-cookie';
 const axios = require('axios');
+const cookies = new Cookies();
 
 class EditChild extends Component{
     constructor(props) {
@@ -27,6 +29,12 @@ class EditChild extends Component{
     }
 
     componentDidMount() {
+        if(cookies.get('isLogin') != "true"){
+            swal("Usuario no valido", "Por favor ingresa al sistema", "error")
+            .then(() => {
+                this.props.history.push('/');
+            });
+        }
         axios.get(`https://santa-api-ldaw.herokuapp.com/children/${this.state.id}`)
         .then(res => {
             this.setState({

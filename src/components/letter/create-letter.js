@@ -12,7 +12,9 @@ import Button from '@material-ui/core/Button';
 import swal from 'sweetalert';
 import Menu from '../menu';
 import Paper from '@material-ui/core/Paper';
+import Cookies from 'universal-cookie';
 const axios = require('axios');
+const cookies = new Cookies();
 
 class CreateLetter extends Component {
     constructor(props){
@@ -30,6 +32,12 @@ class CreateLetter extends Component {
     }
 
     componentDidMount(){
+        if(cookies.get('isLogin') != "true"){
+            swal("Usuario no valido", "Por favor ingresa al sistema", "error")
+            .then(() => {
+                this.props.history.push('/');
+            });
+        }
         axios.get('https://santa-api-ldaw.herokuapp.com/children')
         .then(res => {
             this.setState({
@@ -49,21 +57,43 @@ class CreateLetter extends Component {
         if(this.state.child == '' || this.state.date_letter == '' || !this.state.gifts.every(gft => gft != ""))
             swal("Error", "Ningun campo debe estar vacio", "error");
         else {
-            axios.post('https://santa-api-ldaw.herokuapp.com/letter', {
-            children: this.state.child,
-            date_of_letter: this.state.date_letter,
-            gifts: this.state.gifts
-          })
-          .then(res => {
-            swal("Carta Agregada", "La carta ha sido agregada", "success")
-            .then(() => {
-                this.props.history.push('/letter-list')
+            axios.get(`https://santa-api-ldaw.herokuapp.com/letter`)
+            .then(res => {
+                res.data.result.forEach(lett => {
+                    if(lett.children == this.state.child) {
+                        axios.put(`https://santa-api-ldaw.herokuapp.com/letter/${lett._id}`, {
+                            gifts: lett.gifts.concat(this.state.gifts)
+                        })
+                        .then(res => {
+                            swal("Carta Agregada", "La carta ha sido agregada", "success")
+                            .then(() => {
+                                this.props.history.push('/letter-list')
+                            })
+                          })
+                          .catch(err => {
+                              console.log(err);
+                              swal("Error", "Por favor revisa tus datos", "error");
+                          });
+                    } else {
+                        axios.post('https://santa-api-ldaw.herokuapp.com/letter', {
+                            children: this.state.child,
+                            date_of_letter: this.state.date_letter,
+                            gifts: this.state.gifts
+                        })
+                        .then(res => {
+                            swal("Carta Agregada", "La carta ha sido agregada", "success")
+                            .then(() => {
+                                this.props.history.push('/letter-list')
+                            })
+                        })
+                        .catch(err => {
+                            console.log(err);
+                            swal("Error", "Por favor revisa tus datos", "error");
+                        });
+                    }
+                })
             })
-          })
-          .catch(err => {
-              console.log(err);
-              swal("Error", "Por favor revisa tus datos", "error");
-          });
+            
         }
     }
 

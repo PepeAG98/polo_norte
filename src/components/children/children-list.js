@@ -16,7 +16,9 @@ import EditIcon from '@material-ui/icons/Edit';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import swal from 'sweetalert';
+import Cookies from 'universal-cookie';
 const axios = require('axios');
+const cookies = new Cookies();
 
 class ChildrenList extends Component {
     constructor(props){
@@ -27,6 +29,12 @@ class ChildrenList extends Component {
     }
 
     componentDidMount(){
+        if(cookies.get('isLogin') != "true"){
+            swal("Usuario no valido", "Por favor ingresa al sistema", "error")
+            .then(() => {
+                this.props.history.push('/');
+            });
+        }
         axios.get('https://santa-api-ldaw.herokuapp.com/children')
         .then(res => {
             this.setState({

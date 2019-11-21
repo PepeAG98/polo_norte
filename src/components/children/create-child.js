@@ -7,7 +7,9 @@ import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import Checkbox from '@material-ui/core/Checkbox';
 import swal from 'sweetalert';
+import Cookies from 'universal-cookie';
 const axios = require('axios');
+const cookies = new Cookies();
 
 class CreateChild extends Component {
     constructor(props) {
@@ -22,6 +24,15 @@ class CreateChild extends Component {
         this.myDate = this.myDate.bind(this);
         this.myAddress = this.myAddress.bind(this);
         this.save = this.save.bind(this);
+    }
+
+    componentDidMount(){
+        if(cookies.get('isLogin') != "true"){
+            swal("Usuario no valido", "Por favor ingresa al sistema", "error")
+            .then(() => {
+                this.props.history.push('/');
+            });
+        }
     }
 
     myName(event) {
@@ -68,16 +79,24 @@ class CreateChild extends Component {
             evil: this.state.evil
           })
           .then(res => {
-            swal("Niño Agregado", `${this.state.name} ha sido agregado`, "success")
-            .then(() => {
-                this.props.history.push('/children-list')
+              if(this.state.evil === true) {
+                axios.post(`https://santa-api-ldaw.herokuapp.com/letter`,{
+                    children: res.data.children._id,
+                    date_of_letter: `${new Date().getFullYear()}-${new Date().getMonth()}-${new Date().getDate()}`,
+                    gifts: ['Carbon']
+                });
+                }
+                swal("Niño Agregado", `${this.state.name} ha sido agregado`, "success")
+                .then(() => {
+                    this.props.history.push('/children-list')
+                })
             })
-          })
           .catch(err => {
               console.log(err);
               swal("Error", "Por favor revisa tus datos", "error");
           });
         }
+        
     }
 
     render() {

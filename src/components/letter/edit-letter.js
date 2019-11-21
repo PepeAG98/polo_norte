@@ -9,8 +9,10 @@ import Button from '@material-ui/core/Button';
 import DoneIcon from '@material-ui/icons/Done';
 import Menu from '../menu';
 import Paper from '@material-ui/core/Paper';
+import Cookies from 'universal-cookie';
 import swal from 'sweetalert';
 const axios = require('axios');
+const cookies = new Cookies();
 
 export default class EditLetter extends Component {
     constructor(props) {
@@ -30,6 +32,12 @@ export default class EditLetter extends Component {
     }
 
     componentDidMount() {
+        if(cookies.get('isLogin') != "true"){
+            swal("Usuario no valido", "Por favor ingresa al sistema", "error")
+            .then(() => {
+                this.props.history.push('/');
+            });
+        }
         let myChild;
         axios.get(`https://santa-api-ldaw.herokuapp.com/letter/${this.state.id}`)
         .then(res => {

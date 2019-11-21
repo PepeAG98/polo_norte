@@ -19,7 +19,11 @@ import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import CardGiftcardIcon from '@material-ui/icons/CardGiftcard';
 import swal from 'sweetalert';
+import Cookies from 'universal-cookie';
 const axios = require('axios');
+const cookies = new Cookies();
+
+
 
 class LetterList extends Component {
     constructor(props) {
@@ -31,9 +35,20 @@ class LetterList extends Component {
         }
         this.delete = this.delete.bind(this);
         this.finder = this.finder.bind(this);
+        this.intersect  = this.intersect.bind(this);
     }
 
+    intersect(a, b) {
+        return [...new Set(a)].filter(x => new Set(b).has(x));
+  }
+
     componentDidMount() {
+        if(cookies.get('isLogin') != "true"){
+            swal("Usuario no valido", "Por favor ingresa al sistema", "error")
+            .then(() => {
+                this.props.history.push('/');
+            });
+        }
         axios.get('https://santa-api-ldaw.herokuapp.com/letter')
         .then(res => {
             this.setState({
@@ -53,15 +68,17 @@ class LetterList extends Component {
         .catch(err => {
             console.log(err);
         });
+        let gifts = ['Audifonos', 'E-Reader', 'Camara Instantanea', 'Perro', 'Celular', 'Bicicleta', 'Juego de Mesa'];
         const currentDay = new Date().getUTCDate();
         const currentMonth = new Date().getMonth();
         const currentHour = new Date().getUTCHours();
         if(currentMonth == 10){
             if(currentDay == 21){
-                if(currentHour >= 10)
+                if(currentHour >= 10){
                     this.setState({christmas: true});
+                }
             }
-            else if(currentDay == 22) {
+            else if(currentDay == 25) {
                 if(currentHour <= 23)
                     this.setState({christmas: true});
             }
