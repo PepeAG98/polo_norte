@@ -31,17 +31,50 @@ export default class EditLetter extends Component {
     }
 
     componentDidMount() {
+        let myChild;
         axios.get(`https://santa-api-ldaw.herokuapp.com/letter/${this.state.id}`)
         .then(res => {
             this.setState({
                 child: res.data.letter.children,
                 gifts: res.data.letter.gifts 
             });
+            myChild = res.data.letter.children;
+        });
+        axios.get(`https://santa-api-ldaw.herokuapp.com/children`)
+        .then(res => {
+            res.data.result.forEach(find => {
+                if(find._id == myChild) {
+                    this.setState({nameChild: find.name});
+                    console.log(find.name);
+                }
+            });
+        });
+        let myDate = `${new Date().getFullYear()}-${new Date().getMonth()}-${new Date().getDate()}`;
+        this.setState({
+            date_letter: myDate
         });
     }
 
     edit(){
-        console.log(this.state.gifts);
+        if(this.state.child == '' || this.state.date_letter == '' || !this.state.gifts.every(gft => gft != ""))
+            swal("Error", "Ningun campo debe estar vacio", "error");
+        else {
+            axios.put(`https://santa-api-ldaw.herokuapp.com/letter/${this.state.id}`, {
+                children: this.state.children,
+                date_of_letter: this.state.date_letter,
+                gifts: this.state.gifts
+            })
+            .then(() => {
+                swal("Información Actualizada", "Los datos fueron actualizados", "succcess")
+                .then(()=> {
+                    this.props.history.push('/letter-list');
+                });
+            })
+            .catch(err => {
+                swal("Error", "Por favor revisa tus datos", "error");
+            });
+        }
+        
     }
 
     addNew(){
@@ -51,6 +84,7 @@ export default class EditLetter extends Component {
     }
 
     myGift(event, indice) {
+        console.log(indice);
         this.state.gifts[indice] = event.target.value;
     }
 
@@ -58,13 +92,13 @@ export default class EditLetter extends Component {
         let target;
         axios.get(`https://santa-api-ldaw.herokuapp.com/children`)
         .then(res => {
-            console.log(res.data.result);
             target = res.data.result.forEach(find => {
-                if(find._id == child) 
+                if(find._id == child) {
                     target = find.name;
+                    console.log(find.name);
+                }
             });
         });
-        console.log(target);
         return target;
     }
 
@@ -81,7 +115,7 @@ export default class EditLetter extends Component {
                 <Menu />
                 <Grid container direction="column" justify="center" alignItems="stretch">
                     <Grid item xs={12}>
-                        <Typography variant="h4" gutterBottom>{this.state.child}</Typography>
+                        <Typography variant="h4" gutterBottom>{this.state.nameChild}</Typography>
                     </Grid>
                     <Grid item xs={12}>
                         <Button
@@ -107,8 +141,8 @@ export default class EditLetter extends Component {
                                             label="Regalo"
                                             margin="normal"
                                             variant="outlined"
-                                            value={gift}
                                             style={{width: '100%'}}
+                                            defaultValue={gift}
                                             onChange={(e) => this.myGift(e, ind)}
                                         />
                                     </Grid>

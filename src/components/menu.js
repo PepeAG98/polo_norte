@@ -137,7 +137,10 @@ export default function Menu(props) {
 
   function SignOut() {
     cookies.set('isLogin', 'false', { path: '/' });
-    //props.history.push('/');
+    swal("Sesión Cerrada", "Tu sesión se ha cerrado correctamente", "success")
+    .then(() => {
+      window.location.href = "/";
+    });
   }
 
     return(
