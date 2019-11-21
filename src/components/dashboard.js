@@ -12,6 +12,7 @@ import DescriptionIcon from '@material-ui/icons/Description';
 import Cookies from 'universal-cookie';
 import './styles/dashboard.css';
 import swal from 'sweetalert';
+const Snow = require('react-snow-effect');
 const cookies = new Cookies();
 /*
 const useStyles = makeStyles(theme => ({
@@ -93,8 +94,9 @@ class Dashboard extends Component {
     render() {
         return(
             <div className="main">
+                <Snow />
                 <Menu />
-                <Grid container direction="row" justify="center" alignItems="center" spacing={3}>
+                <Grid container direction="row" justify="center" alignItems="center" spacing={3} style={{marginTop: 10}}>
                     <Grid item xs={12} md={6} lg={6}>
                         <Link to="create-child"><Paper style={{background: '#f5f5f5'}}>
                             <Grid container direction="column" justify="center" alignItems="center">

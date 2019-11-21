@@ -17,6 +17,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import swal from 'sweetalert';
+const Snow = require('react-snow-effect');
 const axios = require('axios');
 
 class ChildrenList extends Component {
@@ -48,6 +49,7 @@ class ChildrenList extends Component {
         })
         .catch(err => {
             console.log(err);
+            this.props.history.push('/children-list');
         });
     }
 
@@ -62,14 +64,20 @@ class ChildrenList extends Component {
         .then((willDelete) => {
             if (willDelete) {
                 axios.delete(`https://santa-api-ldaw.herokuapp.com/children/${child}`)
-                .then(() => {
-                    swal("Información eliminada", {
-                        icon: "success",
+                .catch(() => {
+                    axios.get('https://santa-api-ldaw.herokuapp.com/letter')
+                    .then(res => {
+                        let toDelete = res.data.result.find(lett => lett.children == child);
+                        if(toDelete){
+                            axios.delete(`https://santa-api-ldaw.herokuapp.com/letter/${toDelete._id}`)
+                            .catch(()=> {
+                                swal("Información eliminada", {
+                                    icon: "success",
+                                });
+                            });
+                        }
                     });
-                })
-                .catch(err => {
-                    swal("Error", "No se pudo eliminar", "error");
-                })
+                });
             } else {
               swal("Eliminación Cancelada");
             }
@@ -79,6 +87,7 @@ class ChildrenList extends Component {
     render(){
         return(
             <div className="main">
+                <Snow />
                 <Menu />
                 <Grid container direction="column" justify="flex-end" alignItems="flex-end">
                     <Link to="/create-child"><Button

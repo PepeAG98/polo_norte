@@ -13,6 +13,8 @@ import DoneIcon from '@material-ui/icons/Done';
 import Button from '@material-ui/core/Button';
 import swal from 'sweetalert';
 import Menu from '../menu';
+import Paper from '@material-ui/core/Paper';
+const Snow = require('react-snow-effect');
 const axios = require('axios');
 
 class CreateLetter extends Component {
@@ -47,7 +49,7 @@ class CreateLetter extends Component {
     }
 
     save(){
-        if(this.state.child == '' || this.state.date_letter == '' || this.state.gifts[0] == "")
+        if(this.state.child == '' || this.state.date_letter == '' || !this.state.gifts.every(gft => gft != ""))
             swal("Error", "Ningun campo debe estar vacio", "error");
         else {
             axios.post('https://santa-api-ldaw.herokuapp.com/letter', {
@@ -69,9 +71,19 @@ class CreateLetter extends Component {
     }
 
     myChild(event){
-        this.setState({
-            child: event.target.value
-        });
+        let theChild = this.state.children.find(child => child._id == event.target.value)
+        if(theChild.evil == true) {
+            swal("Niño Malo", "Regresa cuando tu conducta haya mejorado", "error")
+            .then(()=> {
+                this.props.history.push('/letter-list');
+            });
+        }
+        else {
+            this.setState({
+                child: event.target.value
+            });
+        }
+        
     }
 
     addGifts(){
@@ -88,6 +100,7 @@ class CreateLetter extends Component {
         return(
             <div className="row">
                 <Menu />
+                <Paper style={{margin: 20, background: '#eee', padding: 10}}>
                 <Grid container direction="column" justify="center" alignItems="flex-start">
                     <Grid item xs={12}>
                         <FormControl variant="outlined" style={{margin: 10, minWidth: 300}}>
@@ -107,12 +120,11 @@ class CreateLetter extends Component {
                             </Select>
                         </FormControl>
                     </Grid>
-                    
                     {this.state.gifts.map((gift, ind) => {
                         return(
                             <div key={ind}>
                                 <Grid container direction="row" justify="center" alignItems="center">
-                                    <Grid item xs={11} style={{paddingRight: 20, paddingLeft: 20}} key={ind}>
+                                    <Grid item xs={11} style={{paddingRight: 20, paddingLeft: 20, width: '100%'}} key={ind}>
                                         <TextField
                                             fullWidth
                                             id="outlined-basic"
@@ -146,6 +158,7 @@ class CreateLetter extends Component {
                     </Button>
                 </Grid>
             </Grid>
+            </Paper>
         </div>
         );
     }

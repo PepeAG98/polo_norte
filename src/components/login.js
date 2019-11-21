@@ -16,10 +16,12 @@ import SnackbarContent from '@material-ui/core/SnackbarContent';
 import WarningIcon from '@material-ui/icons/Warning';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
+import Paper from '@material-ui/core/Paper';
 import swal from 'sweetalert';
 import Cookies from 'universal-cookie';
 const cookies = new Cookies();
 const axios = require('axios');
+const Snow = require('react-snow-effect');
 
 /*
 //Estilos para los Inputs
@@ -256,7 +258,9 @@ class Login extends Component {
   render() {
     return(
       <div className="main">
+          <Snow />
           <Grid container direction="column" justify="center" alignItems="center">
+              <img src="https://images.vexels.com/media/users/3/127090/isolated/preview/a608267cdd6ada5e7d294c4b01c92d40-cara-de-santa-claus-asombrada-by-vexels.png" width="10%"/>
               <Typography variant="h3" gutterBottom>
                   Santa Claus App
               </Typography>
@@ -264,6 +268,7 @@ class Login extends Component {
                   Por favor introduce tu nombre de usuario y contraseña
               </Typography>
           </Grid>
+          <Paper style={{margin: 20, background: '#eee'}}>
           <Grid
               container
               direction="column"
@@ -292,6 +297,7 @@ class Login extends Component {
                   />
               </Grid>
           </Grid>
+          </Paper>
           <Grid
               container
               direction="row"

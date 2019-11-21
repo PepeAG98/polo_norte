@@ -21,7 +21,10 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import CheckIcon from '@material-ui/icons/Check';
 import { ToggleButton } from '@material-ui/lab';
+import Paper from '@material-ui/core/Paper';
+import Checkbox from '@material-ui/core/Checkbox';
 import swal from 'sweetalert';
+const Snow = require('react-snow-effect');
 const axios = require('axios');
 
 /*
@@ -260,9 +263,24 @@ class CreateChild extends Component {
     }
 
     myDate(event) {
-        this.setState({
-            date: event.target.value
-        });
+        let bornYear = event.target.value.slice(0,4);
+        if(Number(new Date().getFullYear())-Number(bornYear) < 2) {
+            swal("Vuelve pronto", "Aún no puede pedir regalos", "error")
+            .then(() => {
+                this.props.history.push('/children-list');
+            });
+        }
+        else if(Number(new Date().getFullYear())-Number(bornYear) > 11) {
+            swal("Tú sabes el secreo", "Ya no estas en edad para pedir regalos", "error")
+            .then(() => {
+                this.props.history.push('/children-list');
+            });
+        }
+        else{
+            this.setState({
+                date: event.target.value
+            });
+        }
     }
 
     myAddress(event) {
@@ -297,6 +315,7 @@ class CreateChild extends Component {
     render() {
         return(
             <div className="main">
+                <Snow />
                 <Menu />
                 <Grid container direction="column" justify="center" alignItems="center">
                     <Typography variant="h3" gutterBottom>
@@ -306,8 +325,9 @@ class CreateChild extends Component {
                         Por favor introduce los datos siguientes:
                     </Typography>
                 </Grid>
-                <Grid container direction="row" justify="center" alignItems="stretch">
-                    <Grid item xs={12} lg={12} style={{addingRight: 20, paddingLeft: 20}}>
+                <Paper style={{margin: 20, background: '#eee', padding: 10}}>
+                <Grid container direction="row" justify="center" alignItems="center">
+                    <Grid item xs={12} lg={12} style={{paddingRight: 20, paddingLeft: 20}}>
                         <TextField
                             required
                             fullWidth
@@ -347,18 +367,19 @@ class CreateChild extends Component {
                                 <span>Maldad</span>
                             </Grid>
                             <Grid item xs={12}>
-                                <ToggleButton
-                                    value="check"
-                                    selected={this.state.evil}
+                                <Checkbox
+                                    checked={this.state.evil}
                                     onChange={() => this.setState({evil: !this.state.evil})}
-                                >
-                                    <CheckIcon color={this.state.evil ? "error": "primary"} />
-                                </ToggleButton>
+                                    color="primary"
+                                    inputProps={{
+                                    'aria-label': 'Maldad',
+                                    }}
+                                />
                             </Grid>
                         </Grid>
-                        
                     </Grid>
                 </Grid>
+                </Paper>
                 <Grid
                     container
                     direction="row"

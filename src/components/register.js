@@ -18,7 +18,9 @@ import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import swal from 'sweetalert';
 import Cookies from 'universal-cookie';
+import Paper from '@material-ui/core/Paper';
 const cookies = new Cookies();
+const Snow = require('react-snow-effect');
 const axios = require('axios');
  
 /*
@@ -277,6 +279,7 @@ class Register extends Component {
   render() {
     return(
       <div className="main">
+          <Snow />
           <Grid container direction="column" justify="center" alignItems="center">
               <Typography variant="h3" gutterBottom>
                   Registro
@@ -285,6 +288,7 @@ class Register extends Component {
                   Por favor introduce los datos siguientes:
               </Typography>
           </Grid>
+          <Paper style={{margin: 20, background: '#eee'}}>
           <Grid
               container
               direction="column"
@@ -326,6 +330,7 @@ class Register extends Component {
                   />
               </Grid>
           </Grid>
+          </Paper>
           <Grid
               container
               direction="row"

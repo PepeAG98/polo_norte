@@ -26,6 +26,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import CardGiftcardIcon from '@material-ui/icons/CardGiftcard';
 import swal from 'sweetalert';
 const axios = require('axios');
+const Snow = require('react-snow-effect');
 
 /*
 //Solo Ejemplo
@@ -141,7 +142,8 @@ class LetterList extends Component {
         super(props);
         this.state = {
             letters: [],
-            children: []
+            children: [],
+            christmas: false
         }
         this.delete = this.delete.bind(this);
         this.finder = this.finder.bind(this);
@@ -167,6 +169,19 @@ class LetterList extends Component {
         .catch(err => {
             console.log(err);
         });
+        const currentDay = new Date().getUTCDate();
+        const currentMonth = new Date().getMonth();
+        const currentHour = new Date().getUTCHours();
+        if(currentMonth == 11){
+            if(currentDay == 24){
+                if(currentHour >= 10)
+                    this.setState({christmas: true});
+            }
+            else if(currentDay == 25) {
+                if(currentHour <= 23)
+                    this.setState({christmas: true});
+            }
+        }
     }
 
     componentDidUpdate() {
@@ -216,17 +231,20 @@ class LetterList extends Component {
         
         return(
             <div className="main">
+                <Snow />
                 <Menu />
                 <Grid container direction="column" justify="flex-end" alignItems="flex-end">
-                    <Link to="/create-letter"><Button
+                    <Button
                         variant="contained"
                         color="primary"
                         size="small"
                         style={{margin: 20}}
                         startIcon={<AddIcon />}
+                        disabled={this.state.christmas}
+                        onClick={() => this.props.history.push('/create-letter')}
                     >
                         Agregar Carta
-                    </Button></Link>
+                    </Button>
                 </Grid>
                 <Grid container direction="column" justify="center" alignItems="stretch">
                     <Grid item xs={12}>
@@ -261,12 +279,12 @@ class LetterList extends Component {
                                             </List>
                                         </div>
                                         <Grid container direction="row" justify="flex-end" alignItems="flex-end">
-                                            <IconButton aria-label="delete" style={{margin: 10, color: 'red'}} onClick={() => this.delete(lett._id)}>
+                                            <IconButton aria-label="delete" color="secondary" style={{margin: 10}} onClick={() => this.delete(lett._id)} disabled={this.state.christmas}>
                                                 <DeleteIcon fontSize="small" />
                                             </IconButton>
-                                            <Link to={`/edit-letter/${lett._id}`}><IconButton aria-label="delete" style={{margin: 10, color: 'blue'}}>
+                                            <IconButton aria-label="delete" color="primary" style={{margin: 10}} disabled={this.state.christmas} onClick={() => this.props.history.push(`/edit-letter/${lett._id}`)}>
                                                 <EditIcon fontSize="small" />
-                                            </IconButton></Link>
+                                            </IconButton>
                                         </Grid>
                                         </ExpansionPanelDetails>
                                     </ExpansionPanel>

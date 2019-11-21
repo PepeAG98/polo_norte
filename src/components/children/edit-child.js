@@ -20,7 +20,10 @@ import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import CheckIcon from '@material-ui/icons/Check';
 import { ToggleButton } from '@material-ui/lab';
+import Checkbox from '@material-ui/core/Checkbox';
 import swal from 'sweetalert';
+import Paper from '@material-ui/core/Paper';
+const Snow = require('react-snow-effect');
 const axios = require('axios');
 
 /*
@@ -326,6 +329,7 @@ class EditChild extends Component{
     render() {
         return(
             <div className="main">
+            <Snow />
             <Menu />
             <Grid container direction="column" justify="center" alignItems="center">
                 <Typography variant="h3" gutterBottom>
@@ -335,8 +339,9 @@ class EditChild extends Component{
                     Por favor introduce los datos siguientes:
                 </Typography>
             </Grid>
-            <Grid container direction="row" justify="center" alignItems="stretch">
-                <Grid item xs={12} lg={12}>
+            <Paper style={{margin: 20, background: '#eee', padding: 10}}>
+            <Grid container direction="row" justify="center" alignItems="center">
+                <Grid item xs={12} lg={12} style={{paddingRight: 20, paddingLeft: 20, paddingTop: 15}}>
                     <TextField
                         required
                         fullWidth
@@ -348,7 +353,7 @@ class EditChild extends Component{
                         onChange={this.handleName}
                     />
                 </Grid>
-                <Grid item xs={12} md={4} style={{paddingRight: 40, paddingLeft: 0, paddingTop: 15}}>
+                <Grid item xs={12} md={4} style={{paddingRight: 40, paddingLeft: 20, paddingTop: 15}}>
                     <TextField
                         fullWidth
                         id="date"
@@ -360,7 +365,7 @@ class EditChild extends Component{
                         onChange={this.handleDate}
                     />
                 </Grid>
-                <Grid item xs={12} md={7}>
+                <Grid item xs={12} md={7} style={{paddingRight: 40, paddingLeft: 20, paddingTop: 10}}>
                     <TextField
                         required
                         fullWidth
@@ -378,28 +383,27 @@ class EditChild extends Component{
                             <span>Maldad</span>
                         </Grid>
                         <Grid item xs={12}>
-                            <ToggleButton
-                                value="check"
-                                selected={this.state.evil}
-                                onChange={() => {
-                                    this.setState({evil: !this.state.evil});
+                            <Checkbox
+                                checked={this.state.evil}
+                                onChange={() => this.setState({evil: !this.state.evil})}
+                                color="primary"
+                                inputProps={{
+                                'aria-label': 'Maldad',
                                 }}
-                            >
-                                <CheckIcon color={this.state.evil ? "error": "primary"} />
-                            </ToggleButton>
+                            />
                         </Grid>
                     </Grid>
-                    
                 </Grid>
             </Grid>
+            </Paper>
             <Grid
                 container
                 direction="row"
                 justify="flex-end"
                 alignItems="center"
             >
-                <Button variant="contained" color="primary" onClick={this.edit}>
-                    Registrar
+                <Button variant="contained" color="primary" onClick={this.edit} style={{margin: 20}}>
+                    Editar
                 </Button>
             </Grid>
         </div>
