@@ -7,7 +7,6 @@ import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import Checkbox from '@material-ui/core/Checkbox';
 import swal from 'sweetalert';
-const Snow = require('react-snow-effect');
 const axios = require('axios');
 
 class CreateChild extends Component {
@@ -84,7 +83,6 @@ class CreateChild extends Component {
     render() {
         return(
             <div className="main">
-                <Snow />
                 <Menu />
                 <Grid container direction="column" justify="center" alignItems="center">
                     <Typography variant="h3" gutterBottom>

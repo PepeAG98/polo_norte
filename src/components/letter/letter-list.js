@@ -20,7 +20,6 @@ import IconButton from '@material-ui/core/IconButton';
 import CardGiftcardIcon from '@material-ui/icons/CardGiftcard';
 import swal from 'sweetalert';
 const axios = require('axios');
-const Snow = require('react-snow-effect');
 
 class LetterList extends Component {
     constructor(props) {
@@ -116,7 +115,6 @@ class LetterList extends Component {
         
         return(
             <div className="main">
-                <Snow />
                 <Menu />
                 <Grid container direction="column" justify="flex-end" alignItems="flex-end">
                     <Button

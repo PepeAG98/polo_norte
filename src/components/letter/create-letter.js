@@ -12,7 +12,6 @@ import Button from '@material-ui/core/Button';
 import swal from 'sweetalert';
 import Menu from '../menu';
 import Paper from '@material-ui/core/Paper';
-const Snow = require('react-snow-effect');
 const axios = require('axios');
 
 class CreateLetter extends Component {
@@ -97,7 +96,6 @@ class CreateLetter extends Component {
     render(){
         return(
             <div className="row">
-                <Snow />
                 <Menu />
                 <Paper style={{margin: 20, background: '#eee', padding: 10}}>
                 <Grid container direction="column" justify="center" alignItems="flex-start">

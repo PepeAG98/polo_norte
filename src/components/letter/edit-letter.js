@@ -11,7 +11,6 @@ import Menu from '../menu';
 import Paper from '@material-ui/core/Paper';
 import swal from 'sweetalert';
 const axios = require('axios');
-const Snow = require('react-snow-effect');
 
 export default class EditLetter extends Component {
     constructor(props) {
@@ -111,7 +110,6 @@ export default class EditLetter extends Component {
     render(){
         return(
             <div className="main">
-                <Snow />
                 <Menu />
                 <Grid container direction="column" justify="center" alignItems="stretch">
                     <Grid item xs={12}>

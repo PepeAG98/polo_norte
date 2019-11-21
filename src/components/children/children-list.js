@@ -16,7 +16,6 @@ import EditIcon from '@material-ui/icons/Edit';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import swal from 'sweetalert';
-const Snow = require('react-snow-effect');
 const axios = require('axios');
 
 class ChildrenList extends Component {
@@ -86,7 +85,6 @@ class ChildrenList extends Component {
     render(){
         return(
             <div className="main">
-                <Snow />
                 <Menu />
                 <Grid container direction="column" justify="flex-end" alignItems="flex-end">
                     <Link to="/create-child"><Button
