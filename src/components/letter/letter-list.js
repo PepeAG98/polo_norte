@@ -67,14 +67,14 @@ class LetterList extends Component {
         const currentDay = new Date().getUTCDate();
         const currentMonth = new Date().getMonth();
         const currentHour = new Date().getUTCHours();
-        if(currentMonth == 10){
-            if(currentDay == 22){
-                if(currentHour >= 0){
+        if(currentMonth == 11){
+            if(currentDay == 24){
+                if(currentHour >= 9){
                     this.setState({christmas: true});
                     this.entregaRegalos();
                 }
             }
-            else if(currentDay == 23) {
+            else if(currentDay == 25) {
                 if(currentHour <= 23)
                     this.setState({christmas: true});
             }
