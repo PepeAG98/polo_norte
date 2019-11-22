@@ -26,6 +26,7 @@ class ChildrenList extends Component {
         this.state = {
             data: []
         }
+        this.underEleven = this.underEleven.bind(this);
     }
 
     componentDidMount(){
@@ -44,6 +45,9 @@ class ChildrenList extends Component {
         .catch(err => {
             console.log(err);
         });
+        if(new Date().getHours() === 0) {
+            this.underEleven();
+        }
     }
 
     componentDidUpdate() {
@@ -57,6 +61,23 @@ class ChildrenList extends Component {
             console.log(err);
             this.props.history.push('/children-list');
         });
+    }
+
+    underEleven() {
+        axios.get('https://santa-api-ldaw.herokuapp.com/children')
+        .then(res => {
+            res.data.result.forEach(child => {
+                let ageChild = Number(child.date_birth.split("-")[0]);
+                let monthChild = Number(child.date_birth.split("-")[1]);
+                let dayChild = Number(child.date_birth.split("-")[2]);
+                let currentYear = new Date().getFullYear();
+                let currentMonth = new Date().getMonth()+1;
+                let currentDay = new Date().getDate();
+                if((currentYear-ageChild >= 11) && (currentMonth-monthChild >= 0) && (currentDay-dayChild >= 0)) {
+                    axios.delete(`https://santa-api-ldaw.herokuapp.com/children/${child._id}`);
+                }
+            })
+        })
     }
 
     delete(child){

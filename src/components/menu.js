@@ -1,5 +1,5 @@
-import React, { Component, setState, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Link, Redirect } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -152,7 +152,7 @@ export default function Menu(props) {
                     </Icon>
                 </Hidden>
                 <Typography variant="h6" className={classes.title}>
-                Santa App
+                Polo Norte App
                 </Typography>
                 <Hidden mdDown>
                     <Link to="/dashboard"><Button startIcon={<DashboardIcon/>} color="inherit">Dashboard</Button></Link>

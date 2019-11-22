@@ -42,15 +42,20 @@ class CreateChild extends Component {
     }
 
     myDate(event) {
-        let bornYear = event.target.value.slice(0,4);
-        if(Number(new Date().getFullYear())-Number(bornYear) < 2) {
+        let ageChild = Number(event.target.value.split("-")[0]);
+        let monthChild = Number(event.target.value.split("-")[1]);
+        let dayChild = Number(event.target.value.split("-")[2]);
+        let currentYear = new Date().getFullYear();
+        let currentMonth = new Date().getMonth()+1;
+        let currentDay = new Date().getDate();
+        if((currentYear-ageChild <= 2) && (currentMonth-monthChild >= 0) && (currentDay-dayChild >= 0)) {
             swal("Vuelve pronto", "Aún no puede pedir regalos", "error")
             .then(() => {
                 this.props.history.push('/children-list');
             });
         }
-        else if(Number(new Date().getFullYear())-Number(bornYear) > 11) {
-            swal("Tú sabes el secreo", "Ya no estas en edad para pedir regalos", "error")
+        else if((currentYear-ageChild >= 11) && (currentMonth-monthChild >= 0) && (currentDay-dayChild >= 0)) {
+            swal("Tú sabes el secreto", "Ya no estas en edad para pedir regalos", "error")
             .then(() => {
                 this.props.history.push('/children-list');
             });

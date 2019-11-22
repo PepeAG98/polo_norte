@@ -18,6 +18,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import CardGiftcardIcon from '@material-ui/icons/CardGiftcard';
+import TodayIcon from '@material-ui/icons/Today';
 import swal from 'sweetalert';
 import Cookies from 'universal-cookie';
 const axios = require('axios');
@@ -183,7 +184,7 @@ class LetterList extends Component {
                                         >
                                         <Typography>{this.finder(lett.children)}</Typography>
                                         </ExpansionPanelSummary>
-                                        <ExpansionPanelDetails>
+                                        <ExpansionPanelDetails style={{width: '100%'}}>
                                         <div>
                                             <List dense={true}>
                                                 {lett.gifts.map((gift, ind) => {
