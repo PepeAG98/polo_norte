@@ -23,12 +23,14 @@ class CreateLetter extends Component {
             children: [],
             child: '',
             date_letter: '',
-            gifts: ['']
+            gifts: [''],
+            lettNew: null
         }
         this.save = this.save.bind(this);
         this.myChild = this.myChild.bind(this);
         this.addGifts = this.addGifts.bind(this);
         this.myGift = this.myGift.bind(this);
+        this.isNew = this.isNew.bind(this);
     }
 
     componentDidMount(){
@@ -53,14 +55,24 @@ class CreateLetter extends Component {
         });
     }
 
+    isNew(child) {
+        let r;
+        axios.get(`https://santa-api-ldaw.herokuapp.com/letter`)
+        .then(res => {
+            r = res.data.result.filter(lett => lett.children == child);
+        });
+    }
+
     save(){
         if(this.state.child == '' || this.state.date_letter == '' || !this.state.gifts.every(gft => gft != ""))
             swal("Error", "Ningun campo debe estar vacio", "error");
         else {
+            /*let changeLetter = false;
             axios.get(`https://santa-api-ldaw.herokuapp.com/letter`)
             .then(res => {
                 res.data.result.forEach(lett => {
                     if(lett.children == this.state.child) {
+                        //changeLetter = true;
                         axios.put(`https://santa-api-ldaw.herokuapp.com/letter/${lett._id}`, {
                             gifts: lett.gifts.concat(this.state.gifts)
                         })
@@ -74,26 +86,75 @@ class CreateLetter extends Component {
                               console.log(err);
                               swal("Error", "Por favor revisa tus datos", "error");
                           });
-                    } else {
-                        axios.post('https://santa-api-ldaw.herokuapp.com/letter', {
-                            children: this.state.child,
-                            date_of_letter: this.state.date_letter,
-                            gifts: this.state.gifts
-                        })
-                        .then(res => {
-                            swal("Carta Agregada", "La carta ha sido agregada", "success")
-                            .then(() => {
-                                this.props.history.push('/letter-list')
-                            })
-                        })
-                        .catch(err => {
-                            console.log(err);
-                            swal("Error", "Por favor revisa tus datos", "error");
-                        });
-                    }
+                    } 
                 })
-            })
-            
+            });
+            if(changeLetter == false){
+                axios.post('https://santa-api-ldaw.herokuapp.com/letter', {
+                    children: this.state.child,
+                    date_of_letter: this.state.date_letter,
+                    gifts: this.state.gifts
+                })
+                .then(res => {
+                    swal("Carta Agregada", "La carta ha sido agregada", "success")
+                    .then(() => {
+                        this.props.history.push('/letter-list')
+                    })
+                })
+                .catch(err => {
+                    console.log(err);
+                    swal("Error", "Por favor revisa tus datos", "error");
+                });
+            }*/
+            if(this.state.lettNew) {
+                if(this.state.lettNew.gifts.includes('Carbon')) {
+                    axios.put(`https://santa-api-ldaw.herokuapp.com/letter/${this.state.lettNew._id}`, {
+                        date_of_letter: this.state.date_letter,
+                        gifts: this.state.gifts
+                    })
+                    .then(res => {
+                        swal("Carta Agregada", "La carta ha sido agregada", "success")
+                        .then(() => {
+                            this.props.history.push('/letter-list')
+                        });
+                    })
+                    .catch(err => {
+                        console.log(err);
+                        swal("Error", "Por favor revisa tus datos", "error");
+                    });
+                } else {
+                    axios.put(`https://santa-api-ldaw.herokuapp.com/letter/${this.state.lettNew._id}`, {
+                        date_of_letter: this.state.date_letter,
+                        gifts: this.state.lettNew.gifts.concat(this.state.gifts)
+                    })
+                    .then(res => {
+                        swal("Carta Agregada", "La carta ha sido agregada", "success")
+                        .then(() => {
+                            this.props.history.push('/letter-list')
+                        });
+                    })
+                    .catch(err => {
+                        console.log(err);
+                        swal("Error", "Por favor revisa tus datos", "error");
+                    });
+                }
+            } else {
+                axios.post('https://santa-api-ldaw.herokuapp.com/letter', {
+                    children: this.state.child,
+                    date_of_letter: this.state.date_letter,
+                    gifts: this.state.gifts
+                })
+                .then(res => {
+                    swal("Carta Agregada", "La carta ha sido agregada", "success")
+                    .then(() => {
+                        this.props.history.push('/letter-list')
+                    })
+                })
+                .catch(err => {
+                    console.log(err);
+                    swal("Error", "Por favor revisa tus datos", "error");
+                });
+            }
         }
     }
 
@@ -110,7 +171,17 @@ class CreateLetter extends Component {
                 child: event.target.value
             });
         }
-        
+        let r;
+        axios.get(`https://santa-api-ldaw.herokuapp.com/letter`)
+        .then(res => {
+            r = res.data.result.filter(lett => lett.children == event.target.value);
+            if(r.length){
+                console.log('Ya tiene carta');
+                this.setState({
+                    lettNew: r[0]
+                });
+            }
+        });
     }
 
     addGifts(){

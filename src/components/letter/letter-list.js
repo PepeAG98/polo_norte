@@ -35,11 +35,6 @@ class LetterList extends Component {
         }
         this.delete = this.delete.bind(this);
         this.finder = this.finder.bind(this);
-        this.intersect  = this.intersect.bind(this);
-    }
-
-    intersect(a, b) {
-        return [...new Set(a)].filter(x => new Set(b).has(x));
   }
 
     componentDidMount() {
@@ -72,8 +67,8 @@ class LetterList extends Component {
         const currentDay = new Date().getUTCDate();
         const currentMonth = new Date().getMonth();
         const currentHour = new Date().getUTCHours();
-        if(currentMonth == 10){
-            if(currentDay == 21){
+        if(currentMonth == 11){
+            if(currentDay == 24){
                 if(currentHour >= 10){
                     this.setState({christmas: true});
                 }
