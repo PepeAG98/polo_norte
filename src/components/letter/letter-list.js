@@ -204,11 +204,11 @@ class LetterList extends Component {
                                             </List>
                                         </div>
                                         <Grid container direction="row" justify="flex-end" alignItems="flex-end">
-                                            <IconButton aria-label="delete" color="secondary" style={{margin: 10}} onClick={() => this.delete(lett._id)} disabled={this.state.christmas}>
-                                                <DeleteIcon fontSize="small" />
-                                            </IconButton>
-                                            <IconButton aria-label="delete" color="primary" style={{margin: 10}} disabled={this.state.christmas} onClick={() => this.props.history.push(`/edit-letter/${lett._id}`)}>
+                                            <IconButton aria-label="delete" color="primary" style ={{marginRight: 30}} disabled={this.state.christmas} onClick={() => this.props.history.push(`/edit-letter/${lett._id}`)}>
                                                 <EditIcon fontSize="small" />
+                                            </IconButton>
+                                            <IconButton aria-label="delete" color="secondary" style ={{marginRight: 30}} onClick={() => this.delete(lett._id)} disabled={this.state.christmas}>
+                                                <DeleteIcon fontSize="small" />
                                             </IconButton>
                                         </Grid>
                                         </ExpansionPanelDetails>
