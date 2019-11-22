@@ -35,6 +35,7 @@ class LetterList extends Component {
         }
         this.delete = this.delete.bind(this);
         this.finder = this.finder.bind(this);
+        this.entregaRegalos = this.entregaRegalos.bind(this);
   }
 
     componentDidMount() {
@@ -63,17 +64,17 @@ class LetterList extends Component {
         .catch(err => {
             console.log(err);
         });
-        let gifts = ['Audifonos', 'E-Reader', 'Camara Instantanea', 'Perro', 'Celular', 'Bicicleta', 'Juego de Mesa'];
         const currentDay = new Date().getUTCDate();
         const currentMonth = new Date().getMonth();
         const currentHour = new Date().getUTCHours();
-        if(currentMonth == 11){
-            if(currentDay == 24){
-                if(currentHour >= 10){
+        if(currentMonth == 10){
+            if(currentDay == 22){
+                if(currentHour >= 0){
                     this.setState({christmas: true});
+                    this.entregaRegalos();
                 }
             }
-            else if(currentDay == 25) {
+            else if(currentDay == 23) {
                 if(currentHour <= 23)
                     this.setState({christmas: true});
             }
@@ -120,6 +121,34 @@ class LetterList extends Component {
             } else {
               swal("Eliminación Cancelada");
             }
+        });
+    }
+
+    entregaRegalos() {
+        let childrenAll = [];
+        axios.get('https://santa-api-ldaw.herokuapp.com/children')
+        .then(res => {
+            res.data.result.forEach(child => childrenAll.push(child._id));
+        })
+        .then(() => {
+            let siTienen = [];
+            this.state.letters.forEach(lett => {
+                if(childrenAll.includes(lett.children))
+                    siTienen.push(lett.children);
+            });
+            console.log(childrenAll.filter(child => !siTienen.includes(child)));
+            let togifts = ['Audifonos', 'E-Reader', 'Camara Instantanea', 'Perro', 'Celular', 'Bicicleta', 'Juego de Mesa'];
+            let noTienen = childrenAll.filter(child => !siTienen.includes(child));
+            noTienen.forEach(child => {
+                axios.post('https://santa-api-ldaw.herokuapp.com/letter', {
+                    children: child,
+                    date_of_letter: `${new Date().getFullYear()}-${new Date().getMonth()}-${new Date().getDate()}`,
+                    gifts: [togifts[Math.round(Math.random() * 6)]]
+                })
+                .then(res => {
+                    swal("Regalos entregados", "Feliz Navidad", "success");
+                })
+            });
         });
     }
 
