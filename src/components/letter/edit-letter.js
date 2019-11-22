@@ -63,7 +63,7 @@ export default class EditLetter extends Component {
         });
     }
 
-    /*edit(){
+    edit(){
         if(this.state.child == '' || this.state.date_letter == '' || !this.state.gifts.every(gft => gft != ""))
             swal("Error", "Ningun campo debe estar vacio", "error");
         else {
@@ -83,47 +83,6 @@ export default class EditLetter extends Component {
             });
         }
         
-    }*/
-
-    edit() {
-        if(this.state.name == '' || this.state.date == '' || this.state.address == '') {
-            swal("Error", "Ningún dato puede estar en blanco", "error");
-        } else {
-            axios.put(`https://santa-api-ldaw.herokuapp.com/children/${this.state.id}`, {
-                name: this.state.name,
-                date_birth: this.state.date,
-                address: this.state.address,
-                evil: this.state.evil
-              })
-              .then(res => {
-                  swal("Información Actualizada", `Los datos de ${this.state.name} se han actualizado`, "success")
-                  .then(() => {
-                    this.props.history.push('/children-list')
-                  })
-              })
-              .then(res => {
-                if(this.state.evil === true) {
-                    axios.get('https://santa-api-ldaw.herokuapp.com/letter')
-                    .then(res => {
-                        this.setState({
-                            letters: res.data.result
-                        });
-                        this.state.letters.forEach(element => {
-                            console.log(element._id)
-                            if(element.children === this.state.id){
-                                axios.delete(`https://santa-api-ldaw.herokuapp.com/letter/${element._id}`)
-                            }
-                        });
-                    })
-                    axios.post(`https://santa-api-ldaw.herokuapp.com/letter`,{
-                        children: this.state.id,
-                        date_of_letter: `${new Date().getFullYear()}-${new Date().getMonth()}-${new Date().getDate()}`,
-                        gifts: ['Carbon']
-                    });
-                    
-                    }
-              })
-        }
     }
 
     addNew(){

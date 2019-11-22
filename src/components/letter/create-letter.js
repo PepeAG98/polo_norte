@@ -113,7 +113,7 @@ class CreateLetter extends Component {
                         gifts: this.state.gifts
                     })
                     .then(res => {
-                        swal("Carta Agregada", "La carta ha sido agregada", "success")
+                        swal("Carta Agregada", "Tu carta ha sido enviada a Santa Claus", "success")
                         .then(() => {
                             this.props.history.push('/letter-list')
                         });
